@@ -275,4 +275,16 @@ public class PlayerController : MonoBehaviour
     {
         return Droplist.Count;
     }
+
+    //첫 번째 꼬리의 속성을 리턴
+    int GetFirstElement()
+    {
+        return Droplist[0].GetComponent<ElementDrop>().Element;
+    }
+
+    //두 번째 꼬리의 속성을 리턴(속성 조합시 사용)
+    int GetSecondElement()
+    {
+        return Droplist[1].GetComponent<ElementDrop>().Element;
+    }
 }
