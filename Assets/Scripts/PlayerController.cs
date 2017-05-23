@@ -25,6 +25,11 @@ public class PlayerController : MonoBehaviour
     public GameObject WindDrop;
     public GameObject EarthDrop;
     public GameObject NullDrop;
+    
+    public GameObject Fireshot;
+    public GameObject Watershot;
+    public GameObject Windshot;
+    public GameObject Sandshot;
 
     //움직임 및 방향전환 관련 변수
     Vector2 Coordinate; //좌표
@@ -55,6 +60,31 @@ public class PlayerController : MonoBehaviour
         PlayerCoodset = new Coordset(Coordinate, Coordinate);
         OldCoord = PlayerCoodset.Old;
         animaitor = this.GetComponent<Animator>();
+
+    }
+
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.gameObject.tag == "fire_ball")
+        {
+            Destroy(col.gameObject);
+            InsertDrop(0);
+        }
+       else if (col.gameObject.tag == "wind_ball")
+        {
+            Destroy(col.gameObject);
+            InsertDrop(2);
+        }
+        else if (col.gameObject.tag == "water_ball")
+        {
+            Destroy(col.gameObject);
+            InsertDrop(1);
+        }
+        else if (col.gameObject.tag == "sand_ball")
+        {
+            Destroy(col.gameObject);
+            InsertDrop(3);
+        }
     }
 
     // Update is called once per frame
@@ -71,6 +101,28 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyUp(KeyCode.S))
             RemoveDrop(); //맨 앞에있는 꼬리 하나 제거
+
+        if (Input.GetKeyUp(KeyCode.X)) // 불 바람 물 땅 마법 사용
+        {
+
+            if (GetFirstElement() == 0)
+            {
+                Instantiate(Fireshot, new Vector3(transform.position.x, transform.position.y, 0), transform.rotation);
+            }
+            else if (GetFirstElement() == 1)
+            {
+                Instantiate(Watershot, new Vector3(transform.position.x, transform.position.y, 0), transform.rotation);
+            }
+            else if (GetFirstElement() == 2)
+            {
+                Instantiate(Windshot, new Vector3(transform.position.x, transform.position.y, 0), transform.rotation);
+            }
+            else if (GetFirstElement() == 3)
+            {
+                Instantiate(Sandshot, new Vector3(transform.position.x, transform.position.y, 0), transform.rotation);
+            }
+                RemoveDrop();
+        }
     }
 
     //나중에 터치&드래그로 바꾸기
@@ -96,6 +148,11 @@ public class PlayerController : MonoBehaviour
             animaitor.SetInteger("direction", 0);
             inputDirection = 1;
         }
+    }
+
+    public int getDirection() //Direction 값 반환
+    {
+        return Direction;
     }
 
     //움직여라 꼬리꼬리 (매 프레임마다 실행)

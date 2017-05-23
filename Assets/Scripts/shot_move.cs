@@ -1,0 +1,71 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class shot_move : MonoBehaviour {
+
+    //private Animator anim;
+    private Quaternion angle = Quaternion.identity;
+    public float moveSpeed = 5f;
+    public int dir = 0;
+    PlayerController move;
+
+    // Use this for initialization
+    void Start ()
+    {
+       move = GameObject.Find("Player").GetComponent<PlayerController>();
+
+        if (move.getDirection() == 0) // 0 : 위, 1 : 아래, 2 : : 왼쪽, 3 : 오른쪽
+        {
+            dir = 0;
+            transform.Rotate(0, 0, -90);
+        }
+        else if (move.getDirection() == 1)
+        {
+            dir = 1;
+            transform.Rotate(0, 0, 90);
+        }
+        else if (move.getDirection() == 2)
+        {
+            dir = 2;
+        }
+        else if (move.getDirection() == 3)
+        {
+            dir = 3;
+            transform.Rotate(0, 0, 180);
+        }
+    }
+
+    //void OnTriggerEnter2D(Collider2D col)
+    //{
+    //    if (col.gameObject.tag == "tree")
+    //    {
+    //        anim.SetBool("hit", true);
+    //        Destroy(this.gameObject);
+          
+    //    }
+    //}
+    // 충돌 체크 안됨
+
+        // Update is called once per frame
+        void Update ()
+    {
+        if (dir == 0) // 0 : 위, 1 : 아래, 2 : : 왼쪽, 3 : 오른쪽
+        {
+            transform.Translate( - moveSpeed * Time.deltaTime, 0, 0);
+        }
+        else if (dir == 1)
+        {
+            transform.Translate(- moveSpeed * Time.deltaTime,  0, 0);
+        }
+        else if (dir == 2)
+        {
+            transform.Translate(- moveSpeed * Time.deltaTime, 0, 0);
+        }
+        else if (dir == 3)
+        {
+            transform.Translate(-moveSpeed * Time.deltaTime, 0, 0);
+        }
+
+    }
+}
