@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    private Animator animaitor;
+
     public class Coordset
     {
         public Coordset(Vector2 o, Vector2 n)
@@ -52,6 +54,7 @@ public class PlayerController : MonoBehaviour
 
         PlayerCoodset = new Coordset(Coordinate, Coordinate);
         OldCoord = PlayerCoodset.Old;
+        animaitor = this.GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -74,13 +77,25 @@ public class PlayerController : MonoBehaviour
     void InputKey()
     {
         if (Input.GetKey(KeyCode.LeftArrow))
+        {
+            animaitor.SetInteger("direction", 2);
             inputDirection = 2;
+        }
         else if (Input.GetKey(KeyCode.RightArrow))
+        {
+            animaitor.SetInteger("direction", 3);
             inputDirection = 3;
+        }
         else if (Input.GetKey(KeyCode.UpArrow))
+        {
+            animaitor.SetInteger("direction", 1);
             inputDirection = 0;
+        }
         else if (Input.GetKey(KeyCode.DownArrow))
+        {
+            animaitor.SetInteger("direction", 0);
             inputDirection = 1;
+        }
     }
 
     //움직여라 꼬리꼬리 (매 프레임마다 실행)
