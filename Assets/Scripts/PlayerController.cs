@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     }
 
     public float MoveSpeed; //플레이어 속도
+    float orgMoveSpeed; //플레이어의 속도를 임시로 저장 (원래 속도가 얼마였는지 알기 위해)
     public float GridSize; //한 칸의 크기 (단위 : 100분의 1픽셀)
 
     public GameObject FireDrop;
@@ -38,6 +39,7 @@ public class PlayerController : MonoBehaviour
     int inputDirection;
     Vector2 DirCoord; //방향전환용 임시좌표
     bool setDirCoord;
+    int HitDirection; // 맞았을 때 방향
 
     //꼬리 리스트
     List<GameObject> Droplist = new List<GameObject>();
@@ -49,6 +51,9 @@ public class PlayerController : MonoBehaviour
     Vector2 OldCoord;
     float percentOfCoord;
 
+    bool isHit;
+    float hitTimer;
+
     // Use this for initialization
     void Start()
     {
@@ -57,14 +62,19 @@ public class PlayerController : MonoBehaviour
         SetCoordinate();
         setDirCoord = false;
 
+        isHit = false;
+        orgMoveSpeed = MoveSpeed;
+        hitTimer = 0;
+
         PlayerCoodset = new Coordset(Coordinate, Coordinate);
         OldCoord = PlayerCoodset.Old;
         animaitor = this.GetComponent<Animator>();
-
+        animaitor.SetInteger("direction", Direction);
     }
-
+    
     void OnTriggerEnter2D(Collider2D col)
     {
+        //꼬리 구슬 추가
         if (col.gameObject.tag == "fire_ball")
         {
             Destroy(col.gameObject);
@@ -85,15 +95,49 @@ public class PlayerController : MonoBehaviour
             Destroy(col.gameObject);
             InsertDrop(3);
         }
+
+        else if(col.gameObject.tag == "tree" || col.gameObject.tag == "monster")
+        {
+            hitTimer = 1.0f;
+            isHit = true;
+            HitDirection = Direction;
+            transform.position = new Vector3(Coordinate.x * GridSize, Coordinate.y * GridSize, transform.position.z);
+        }
+    }
+
+    //맞았을 때 실행
+    void Hit()
+    {
+        hitTimer += Time.deltaTime;
+        if (HitDirection == inputDirection || Direction + inputDirection == 1 || Direction + inputDirection == 5)
+        {
+            MoveSpeed = 0;
+            if(hitTimer > 0.5f) // 이 시간 주기로 꼬리 하나씩 감소
+            {
+                RemoveDrop();
+                hitTimer = 0;
+            }
+        }
+        else
+        {
+            MoveSpeed = orgMoveSpeed;
+            isHit = false;
+            Direction = inputDirection;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
+        //맞았을 때 매 프레임 실행
+        if (isHit)
+            Hit();
+
         SetCoordinate();
         Move();
         InputKey();
         MoveTails();
+
 
         //======꼬리 추가 및 제거 예시=====
         if (Input.GetKeyUp(KeyCode.A))
@@ -102,24 +146,24 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.S))
             RemoveDrop(); //맨 앞에있는 꼬리 하나 제거
 
-        if (Input.GetKeyUp(KeyCode.X)) // 불 바람 물 땅 마법 사용
+        if (Input.GetKeyUp(KeyCode.Space)) // 불 바람 물 땅 마법 사용
         {
 
             if (GetFirstElement() == 0)
             {
-                Instantiate(Fireshot, new Vector3(transform.position.x, transform.position.y, 0), transform.rotation);
+                Instantiate(Fireshot, new Vector3(transform.position.x, transform.position.y + 0.5f, 0), transform.rotation);
             }
             else if (GetFirstElement() == 1)
             {
-                Instantiate(Watershot, new Vector3(transform.position.x, transform.position.y, 0), transform.rotation);
+                Instantiate(Watershot, new Vector3(transform.position.x, transform.position.y + 0.5f, 0), transform.rotation);
             }
             else if (GetFirstElement() == 2)
             {
-                Instantiate(Windshot, new Vector3(transform.position.x, transform.position.y, 0), transform.rotation);
+                Instantiate(Windshot, new Vector3(transform.position.x, transform.position.y + 0.5f, 0), transform.rotation);
             }
             else if (GetFirstElement() == 3)
             {
-                Instantiate(Sandshot, new Vector3(transform.position.x, transform.position.y, 0), transform.rotation);
+                Instantiate(Sandshot, new Vector3(transform.position.x, transform.position.y + 0.5f, 0), transform.rotation);
             }
                 RemoveDrop();
         }
@@ -130,22 +174,18 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            animaitor.SetInteger("direction", 2);
             inputDirection = 2;
         }
         else if (Input.GetKey(KeyCode.RightArrow))
         {
-            animaitor.SetInteger("direction", 3);
             inputDirection = 3;
         }
         else if (Input.GetKey(KeyCode.UpArrow))
         {
-            animaitor.SetInteger("direction", 1);
             inputDirection = 0;
         }
         else if (Input.GetKey(KeyCode.DownArrow))
         {
-            animaitor.SetInteger("direction", 0);
             inputDirection = 1;
         }
     }
@@ -252,6 +292,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Direction == inputDirection) // 방향전환 없을 경우
         {
+            animaitor.SetInteger("direction", Direction);
             switch (Direction) // 0 : 위, 1 : 아래, 2 : : 왼쪽, 3 : 오른쪽
             {
                 case 0:
@@ -293,13 +334,13 @@ public class PlayerController : MonoBehaviour
                 }
 
                 //다음 그리드까지 이동 후 방향전환
-                if (transform.position.y / GridSize < DirCoord.y && Direction == 0)
+                if (transform.position.y / GridSize <= DirCoord.y && Direction == 0)
                     transform.Translate(MoveVec * MoveSpeed * Time.deltaTime);
-                else if (transform.position.y / GridSize > DirCoord.y && Direction == 1)
+                else if (transform.position.y / GridSize >= DirCoord.y && Direction == 1)
                     transform.Translate(MoveVec * MoveSpeed * Time.deltaTime);
-                else if (transform.position.x / GridSize > DirCoord.x && Direction == 2)
+                else if (transform.position.x / GridSize >= DirCoord.x && Direction == 2)
                     transform.Translate(MoveVec * MoveSpeed * Time.deltaTime);
-                else if (transform.position.x / GridSize < DirCoord.x && Direction == 3)
+                else if (transform.position.x / GridSize <= DirCoord.x && Direction == 3)
                     transform.Translate(MoveVec * MoveSpeed * Time.deltaTime);
                 else
                 {
@@ -338,8 +379,11 @@ public class PlayerController : MonoBehaviour
     //맨 앞에있는 구슬 제거
     void RemoveDrop()
     {
-        Destroy(Droplist[0]);
-        Droplist.RemoveAt(0);
+        if(Droplist.Count > 0)
+        {
+            Destroy(Droplist[0]);
+            Droplist.RemoveAt(0);
+        }
     }
 
     //꼬리 길이를 리턴
