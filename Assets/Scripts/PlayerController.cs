@@ -32,6 +32,11 @@ public class PlayerController : MonoBehaviour
     public GameObject Windshot;
     public GameObject Sandshot;
 
+    public AudioClip fireSound;
+    public AudioClip windSound;
+    public AudioClip waterSound;
+    public AudioClip sandSound;
+
     //움직임 및 방향전환 관련 변수
     Vector2 Coordinate; //좌표
     Vector3 MoveVec; //방향 벡터
@@ -152,18 +157,22 @@ public class PlayerController : MonoBehaviour
             if (GetFirstElement() == 0)
             {
                 Instantiate(Fireshot, new Vector3(transform.position.x, transform.position.y + 0.5f, 0), transform.rotation);
+                SoundManager.instance.RandomizeSfx(fireSound);//마법 사용시에 불, 바람, 물, 땅 사운드 출력
             }
             else if (GetFirstElement() == 1)
             {
                 Instantiate(Watershot, new Vector3(transform.position.x, transform.position.y + 0.5f, 0), transform.rotation);
+                SoundManager.instance.RandomizeSfx(waterSound);
             }
             else if (GetFirstElement() == 2)
             {
                 Instantiate(Windshot, new Vector3(transform.position.x, transform.position.y + 0.5f, 0), transform.rotation);
+                SoundManager.instance.RandomizeSfx(windSound);
             }
             else if (GetFirstElement() == 3)
             {
                 Instantiate(Sandshot, new Vector3(transform.position.x, transform.position.y + 0.5f, 0), transform.rotation);
+                SoundManager.instance.RandomizeSfx(sandSound);
             }
                 RemoveDrop();
         }
@@ -379,7 +388,7 @@ public class PlayerController : MonoBehaviour
     //맨 앞에있는 구슬 제거
     void RemoveDrop()
     {
-        if(Droplist.Count > 0)
+        if (Droplist.Count > 0)
         {
             Destroy(Droplist[0]);
             Droplist.RemoveAt(0);

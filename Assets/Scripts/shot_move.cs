@@ -10,6 +10,7 @@ public class shot_move : MonoBehaviour {
     public int dir = 0;
     PlayerController move;
 
+
     bool isHit;
     float aliveTime;
 
