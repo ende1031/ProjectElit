@@ -37,15 +37,15 @@ public class CamaraController : MonoBehaviour {
         TargetTransform = Player.transform.position;
 
         //벽에 가까이 있으면 TargetTransform를 조정
-        if (TargetTransform.x - LeftWall.transform.position.x < 5.6f)
-            TargetTransform.x = LeftWall.transform.position.x + 5.6f;
-        if (RightWall.transform.position.x - TargetTransform.x < 5.6f)
-            TargetTransform.x = RightWall.transform.position.x - 5.6f;
+        if (TargetTransform.x - LeftWall.transform.position.x < 3.5f)
+            TargetTransform.x = LeftWall.transform.position.x + 3.5f;
+        if (RightWall.transform.position.x - TargetTransform.x < 3.5f)
+            TargetTransform.x = RightWall.transform.position.x - 3.5f;
         
-        if (TopWall.transform.position.y - TargetTransform.y < 3.5f)
-            TargetTransform.y = TopWall.transform.position.y - 3.5f;
-        if (TargetTransform.y - BotWall.transform.position.y < 3.5f)
-            TargetTransform.y = BotWall.transform.position.y + 3.5f;
+        if (TopWall.transform.position.y - TargetTransform.y < 5.5f)
+            TargetTransform.y = TopWall.transform.position.y - 5.5f;
+        if (TargetTransform.y - BotWall.transform.position.y < 5.5f)
+            TargetTransform.y = BotWall.transform.position.y + 5.5f;
 
         //타겟을 향해 움직임
         TempTransform.x += (TempTransform.x - TargetTransform.x) / -15 * CameraSpeed * Time.deltaTime;
