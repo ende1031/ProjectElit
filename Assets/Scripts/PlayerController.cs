@@ -65,6 +65,7 @@ public class PlayerController : MonoBehaviour
 
     bool canCangeDir;
 
+    int NullElementNum;//맨 앞 방해구슬 개수만큼 무시
     // Use this for initialization
     void Start()
     {
@@ -83,6 +84,8 @@ public class PlayerController : MonoBehaviour
         OldCoord = PlayerCoodset.Old;
         animaitor = this.GetComponent<Animator>();
         animaitor.SetInteger("direction", Direction);
+
+        NullElementNum = 0;
     }
 
     //충돌처리
@@ -108,6 +111,11 @@ public class PlayerController : MonoBehaviour
         {
             Destroy(col.gameObject);
             InsertDrop(3);
+        }
+        else if (col.gameObject.tag == "null_ball")
+        {
+            Destroy(col.gameObject);
+            InsertDrop(4);
         }
 
         else if (col.gameObject.tag == "tree" || col.gameObject.tag == "monster")
@@ -171,6 +179,11 @@ public class PlayerController : MonoBehaviour
 
         SetCoordinate();
 
+        //맨 앞의 방해구슬 개수 체크
+        while (Droplist[NullElementNum].GetComponent<ElementDrop>().Element == 4)
+        {
+            NullElementNum++;
+        }
 
         if (Input.GetKeyUp(KeyCode.Space)) // 불 바람 물 땅 마법 사용
         {
@@ -477,13 +490,13 @@ public class PlayerController : MonoBehaviour
         MoveTails();
     }
 
-    //맨 앞에있는 구슬 제거
+    //맨 앞에있는 구슬 제거 (방해구슬은 무시함)
     void RemoveDrop()
     {
-        if (Droplist.Count > 0)
+        if (Droplist.Count > NullElementNum)
         {
-            Destroy(Droplist[0]);
-            Droplist.RemoveAt(0);
+            Destroy(Droplist[NullElementNum]);
+            Droplist.RemoveAt(NullElementNum);
         }
     }
 
@@ -493,9 +506,9 @@ public class PlayerController : MonoBehaviour
         return Droplist.Count;
     }
 
-    //e+1번째 꼬리의 속성을 리턴. 0을 넣으면 첫번째를 리턴
+    //방해구슬을 제외한 e+1번째 꼬리의 속성을 리턴. 0을 넣으면 첫번째를 리턴
     int GetElement(int e)
     {
-        return Droplist[e].GetComponent<ElementDrop>().Element;
+        return Droplist[e + NullElementNum].GetComponent<ElementDrop>().Element;
     }
 }
