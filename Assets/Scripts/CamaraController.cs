@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CamaraController : MonoBehaviour {
+public class CamaraController : MonoBehaviour
+{
+
+    public bool StageCamera; //게임스테이지 씬일 경우 true, 타이틀화면처럼 스테이지가 아닐경우 false
 
     public int ScreenSizeX;
     public int ScreenSizeY;
@@ -25,32 +28,35 @@ public class CamaraController : MonoBehaviour {
     }
 
     // Use this for initialization
-    void Start ()
+    void Start()
     {
         TempTransform = transform.position;
     }
 
     // Update is called once per frame
-    void Update ()
+    void Update()
     {
-        //타겟 위치를 받아옴
-        TargetTransform = Player.transform.position;
+        if (StageCamera)
+        {
+            //타겟 위치를 받아옴
+            TargetTransform = Player.transform.position;
 
-        //벽에 가까이 있으면 TargetTransform를 조정
-        if (TargetTransform.x - LeftWall.transform.position.x < 3.5f)
-            TargetTransform.x = LeftWall.transform.position.x + 3.5f;
-        if (RightWall.transform.position.x - TargetTransform.x < 3.5f)
-            TargetTransform.x = RightWall.transform.position.x - 3.5f;
-        
-        if (TopWall.transform.position.y - TargetTransform.y < 5.5f)
-            TargetTransform.y = TopWall.transform.position.y - 5.5f;
-        if (TargetTransform.y - BotWall.transform.position.y < 5.5f)
-            TargetTransform.y = BotWall.transform.position.y + 5.5f;
+            //벽에 가까이 있으면 TargetTransform를 조정
+            if (TargetTransform.x - LeftWall.transform.position.x < 3.5f)
+                TargetTransform.x = LeftWall.transform.position.x + 3.5f;
+            if (RightWall.transform.position.x - TargetTransform.x < 3.5f)
+                TargetTransform.x = RightWall.transform.position.x - 3.5f;
 
-        //타겟을 향해 움직임
-        TempTransform.x += (TempTransform.x - TargetTransform.x) / -15 * CameraSpeed * Time.deltaTime;
-        TempTransform.y += (TempTransform.y - TargetTransform.y) / -15 * CameraSpeed * Time.deltaTime;
-        //위치 적용
-        transform.position = TempTransform;
+            if (TopWall.transform.position.y - TargetTransform.y < 5.5f)
+                TargetTransform.y = TopWall.transform.position.y - 5.5f;
+            if (TargetTransform.y - BotWall.transform.position.y < 5.5f)
+                TargetTransform.y = BotWall.transform.position.y + 5.5f;
+
+            //타겟을 향해 움직임
+            TempTransform.x += (TempTransform.x - TargetTransform.x) / -15 * CameraSpeed * Time.deltaTime;
+            TempTransform.y += (TempTransform.y - TargetTransform.y) / -15 * CameraSpeed * Time.deltaTime;
+            //위치 적용
+            transform.position = TempTransform;
+        }
     }
 }

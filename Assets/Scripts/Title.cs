@@ -15,10 +15,14 @@ public class Title : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.Return))
+        if (Input.GetKey(KeyCode.Return) || Input.GetMouseButtonDown(0)) //엔터 누르거나 화면 아무곳 클릭
         {
-            SceneManager.LoadScene("Stage1");
+            GameStart();
         }
+    }
 
+    public void GameStart() //나중에 다른데서 쓸수도 있을 것 같아서 따로 만들어둠.
+    {
+        GameManager.instance.FadeAndLoadScene("Stage1");
     }
 }

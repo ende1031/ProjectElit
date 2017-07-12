@@ -32,11 +32,6 @@ public class PlayerController : MonoBehaviour
     public GameObject Windshot;
     public GameObject Sandshot;
 
-    public AudioClip fireSound;
-    public AudioClip windSound;
-    public AudioClip waterSound;
-    public AudioClip sandSound;
-
     //움직임 및 방향전환 관련 변수
     Vector2 Coordinate; //좌표
     Vector3 MoveVec; //방향 벡터
@@ -180,9 +175,12 @@ public class PlayerController : MonoBehaviour
         SetCoordinate();
 
         //맨 앞의 방해구슬 개수 체크
-        while (Droplist[NullElementNum].GetComponent<ElementDrop>().Element == 4)
+        if (Droplist.Count > 0) //꼬리가 0개보다 많을 때만 검사
         {
-            NullElementNum++;
+            while (Droplist[NullElementNum].GetComponent<ElementDrop>().Element == 4)
+            {
+                NullElementNum++;
+            }
         }
 
         if (Input.GetKeyUp(KeyCode.Space)) // 불 바람 물 땅 마법 사용
@@ -196,22 +194,22 @@ public class PlayerController : MonoBehaviour
         if (GetElement(0) == 0)
         {
             Instantiate(Fireshot, new Vector3(transform.position.x, transform.position.y + 0.5f, 0), transform.rotation);
-            SoundManager.instance.RandomizeSfx(fireSound);//마법 사용시에 불, 바람, 물, 땅 사운드 출력
+            GameManager.instance.PlaySE("Fire");
         }
         else if (GetElement(0) == 1)
         {
             Instantiate(Watershot, new Vector3(transform.position.x, transform.position.y + 0.5f, 0), transform.rotation);
-            SoundManager.instance.RandomizeSfx(waterSound);
+            GameManager.instance.PlaySE("Water");
         }
         else if (GetElement(0) == 2)
         {
             Instantiate(Windshot, new Vector3(transform.position.x, transform.position.y + 0.5f, 0), transform.rotation);
-            SoundManager.instance.RandomizeSfx(windSound);
+            GameManager.instance.PlaySE("Wind");
         }
         else if (GetElement(0) == 3)
         {
             Instantiate(Sandshot, new Vector3(transform.position.x, transform.position.y + 0.5f, 0), transform.rotation);
-            SoundManager.instance.RandomizeSfx(sandSound);
+            GameManager.instance.PlaySE("Sand");
         }
         RemoveDrop();
     }
