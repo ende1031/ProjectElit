@@ -175,9 +175,9 @@ public class PlayerController : MonoBehaviour
         SetCoordinate();
 
         //맨 앞의 방해구슬 개수 체크
-        if (Droplist.Count > 0) //꼬리가 0개보다 많을 때만 검사
+        if (GetTailLength() > 0 && GetTailLength() != NullElementNum) //꼬리가 0개보다 많을 때만 검사
         {
-            while (Droplist[NullElementNum].GetComponent<ElementDrop>().Element == 4)
+            if (Droplist[NullElementNum].GetComponent<ElementDrop>().Element == 4)
             {
                 NullElementNum++;
             }
@@ -507,6 +507,7 @@ public class PlayerController : MonoBehaviour
     //방해구슬을 제외한 e+1번째 꼬리의 속성을 리턴. 0을 넣으면 첫번째를 리턴
     int GetElement(int e)
     {
+        if (Droplist.Count == NullElementNum) return 5; //임시방편으로 반환할 값이 없으면 5(비어있는 속성값)를 반환.
         return Droplist[e + NullElementNum].GetComponent<ElementDrop>().Element;
     }
 }
