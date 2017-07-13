@@ -20,7 +20,6 @@ public class GameManager : MonoBehaviour
     public AudioClip waterSound;
     public AudioClip sandSound;
 
-    // Use this for initialization
     void Awake()
     {
         if (instance == null)
@@ -97,8 +96,6 @@ public class GameManager : MonoBehaviour
     private IEnumerator LoadSceneAndSetActive(string sceneName)
     {
         yield return SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-        //Debug.Log(sceneName);
-
         Scene newlyLoadedScene = SceneManager.GetSceneAt(SceneManager.sceneCount - 1);
         SceneManager.SetActiveScene(newlyLoadedScene);
     }

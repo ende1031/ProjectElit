@@ -84,88 +84,216 @@ public class PlayerController : MonoBehaviour
     }
 
     //충돌처리
-    void OnTriggerEnter2D(Collider2D col)
+    //void OnTriggerEnter2D(Collider2D col)
+    //{
+    //    //꼬리 구슬 추가
+    //    if (col.gameObject.tag == "fire_ball")
+    //    {
+    //        Destroy(col.gameObject);
+    //        InsertDrop(0);
+    //    }
+    //    else if (col.gameObject.tag == "wind_ball")
+    //    {
+    //        Destroy(col.gameObject);
+    //        InsertDrop(2);
+    //    }
+    //    else if (col.gameObject.tag == "water_ball")
+    //    {
+    //        Destroy(col.gameObject);
+    //        InsertDrop(1);
+    //    }
+    //    else if (col.gameObject.tag == "sand_ball")
+    //    {
+    //        Destroy(col.gameObject);
+    //        InsertDrop(3);
+    //    }
+    //    else if (col.gameObject.tag == "null_ball")
+    //    {
+    //        Destroy(col.gameObject);
+    //        InsertDrop(4);
+    //    }
+
+    //    else if (col.gameObject.tag == "tree" || col.gameObject.tag == "monster" || col.gameObject.tag == "tail")
+    //    {
+    //        hitTimer = 1.0f;
+    //        isHit = true;
+    //        HitDirection = Direction;
+
+    //        canCangeDir = true;
+    //        transform.position = new Vector3(Coordinate.x * GridSize, Coordinate.y * GridSize, transform.position.z);
+    //    }
+    //}
+
+    //맞았을 때 실행
+    //void Hit()
+    //{
+    //    hitTimer += Time.deltaTime;
+    //    if (HitDirection == inputDirection || Direction + inputDirection == 1 || Direction + inputDirection == 5 || HitDirection + inputDirection == 1 || HitDirection + inputDirection == 5)
+    //    {
+    //        MoveSpeed = 0;
+    //        percentOfCoord = 0;
+    //        if (hitTimer > 0.5f) // 이 시간 주기로 꼬리 하나씩 감소
+    //        {
+    //            RemoveDrop();
+
+    //            hitTimer = 0;
+    //        }
+    //    }
+    //    else if (hitTimer > 0.3f)
+    //    {
+    //        MoveSpeed = orgMoveSpeed;
+    //        isHit = false;
+    //        Direction = inputDirection;
+    //        //transform.position = new Vector3(Coordinate.x * GridSize, Coordinate.y * GridSize, transform.position.z);
+    //    }
+    //}
+
+    void Collision_ball()
     {
-        //꼬리 구슬 추가
-        if (col.gameObject.tag == "fire_ball")
+        if (ObjectManager.instance.isPlace(Coordinate, "fire_ball"))
         {
-            Destroy(col.gameObject);
             InsertDrop(0);
+            Destroy(ObjectManager.instance.PlacedObject(Coordinate, "fire_ball"));
         }
-        else if (col.gameObject.tag == "wind_ball")
+        else if (ObjectManager.instance.isPlace(Coordinate, "water_ball"))
         {
-            Destroy(col.gameObject);
-            InsertDrop(2);
-        }
-        else if (col.gameObject.tag == "water_ball")
-        {
-            Destroy(col.gameObject);
             InsertDrop(1);
+            Destroy(ObjectManager.instance.PlacedObject(Coordinate, "water_ball"));
         }
-        else if (col.gameObject.tag == "sand_ball")
+        else if (ObjectManager.instance.isPlace(Coordinate, "wind_ball"))
         {
-            Destroy(col.gameObject);
+            InsertDrop(2);
+            Destroy(ObjectManager.instance.PlacedObject(Coordinate, "wind_ball"));
+        }
+        else if (ObjectManager.instance.isPlace(Coordinate, "sand_ball"))
+        {
             InsertDrop(3);
+            Destroy(ObjectManager.instance.PlacedObject(Coordinate, "sand_ball"));
         }
-        else if (col.gameObject.tag == "null_ball")
+        else if (ObjectManager.instance.isPlace(Coordinate, "null_ball"))
         {
-            Destroy(col.gameObject);
             InsertDrop(4);
-        }
-
-        else if (col.gameObject.tag == "tree" || col.gameObject.tag == "monster")
-        {
-            hitTimer = 1.0f;
-            isHit = true;
-            HitDirection = Direction;
-
-            canCangeDir = true;
-            transform.position = new Vector3(Coordinate.x * GridSize, Coordinate.y * GridSize, transform.position.z);
+            Destroy(ObjectManager.instance.PlacedObject(Coordinate, "null_ball"));
         }
     }
 
-    //맞았을 때 실행
-    void Hit()
+    void Collision_mob()
     {
-        Debug.Log("충돌중");
-        hitTimer += Time.deltaTime;
-        if (HitDirection == inputDirection || Direction + inputDirection == 1 || Direction + inputDirection == 5 || HitDirection + inputDirection == 1 || HitDirection + inputDirection == 5)
+        Vector2 temp = Coordinate;
+        switch (Direction)
         {
-            MoveSpeed = 0;
-            percentOfCoord = 0;
-            if (hitTimer > 0.5f) // 이 시간 주기로 꼬리 하나씩 감소
-            {
-                RemoveDrop();
-                hitTimer = 0;
-            }
-        }
-        else if (hitTimer > 0.3f)
-        {
-            MoveSpeed = orgMoveSpeed;
-            isHit = false;
-            Direction = inputDirection;
-            //transform.position = new Vector3(Coordinate.x * GridSize, Coordinate.y * GridSize, transform.position.z);
+            case 0: //위
+                temp.y += 1;
+                break;
+            case 1: //아래
+                temp.y -= 1;
+                break;
+            case 2: //왼
+                temp.x -= 1;
+                break;
+            case 3: //오른
+                temp.x += 1;
+                break;
         }
 
-        if (hitTimer > 0.2f)
+        if (ObjectManager.instance.isPlace(temp, "monster") || ObjectManager.instance.isPlace(temp, "tree") || ObjectManager.instance.isPlace(temp, "tail"))
         {
-            //canCangeDir = true;
+            isHit = false;
+            MoveSpeed = orgMoveSpeed;
+            if (transform.position.y / GridSize >= Coordinate.y - 0.1 && Direction == 0)
+            {
+                //MoveSpeed = 0;
+                isHit = true;
+
+                if(Direction != inputDirection)
+                {
+                    MoveSpeed = orgMoveSpeed;
+                    ChangeDir_hit();
+                }
+            }
+            if (transform.position.y / GridSize <= Coordinate.y + 0.1 && Direction == 1)
+            {
+                //MoveSpeed = 0;
+                isHit = true;
+
+                if (Direction != inputDirection)
+                {
+                    MoveSpeed = orgMoveSpeed;
+                    ChangeDir_hit();
+                }
+            }
+            if (transform.position.x / GridSize <= Coordinate.x + 0.1 && Direction == 2)
+            {
+                //MoveSpeed = 0;
+                isHit = true;
+
+                if (Direction != inputDirection)
+                {
+                    MoveSpeed = orgMoveSpeed;
+                    ChangeDir_hit();
+                }
+            }
+            if (transform.position.x / GridSize >= Coordinate.x - 0.1 && Direction == 3)
+            {
+                //MoveSpeed = 0;
+                isHit = true;
+
+                if (Direction != inputDirection)
+                {
+                    MoveSpeed = orgMoveSpeed;
+                    ChangeDir_hit();
+                }
+            }
+        }
+        else
+        {
+            isHit = false;
+            MoveSpeed = orgMoveSpeed;
+        }
+    }
+
+    //방향전환
+    void ChangeDir_hit()
+    {
+        if (!setDirCoord) //어디까지 이동 후 방향전환 하는지 설정
+        {
+            DirCoord = Coordinate;
+        }
+        //다음 그리드까지 이동 후 방향전환
+        if (transform.position.y / GridSize < DirCoord.y && Direction == 0)
+            transform.Translate(MoveVec * MoveSpeed * Time.deltaTime);
+        else if (transform.position.y / GridSize > DirCoord.y && Direction == 1)
+            transform.Translate(MoveVec * MoveSpeed * Time.deltaTime);
+        else if (transform.position.x / GridSize > DirCoord.x && Direction == 2)
+            transform.Translate(MoveVec * MoveSpeed * Time.deltaTime);
+        else if (transform.position.x / GridSize < DirCoord.x && Direction == 3)
+            transform.Translate(MoveVec * MoveSpeed * Time.deltaTime);
+        else
+        {
+            setDirCoord = false;
+            transform.position = new Vector3(Coordinate.x * GridSize, Coordinate.y * GridSize, transform.position.z);
+            Direction = inputDirection;
+            canCangeDir = true;
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(Direction + " / " + inputDirection);
+        Debug.Log(Direction + " / " + inputDirection + " / " + canCangeDir);
         //맞았을 때 매 프레임 실행
-        if (isHit)
-        {
-            Hit();
-        }
-        //else
-        {
-            MoveTails();
-        }
+        //if (isHit)
+        //{
+        //    Hit();
+        //}
+
+        Collision_ball();
+        Collision_mob();
+
+        if (!isHit)
+            Move();
+
+        MoveTails();
 
         if(canCangeDir)
         {
@@ -214,13 +342,6 @@ public class PlayerController : MonoBehaviour
         RemoveDrop();
     }
 
-    //움직임 관련은 물리시간마다 호출
-    void FixedUpdate()
-    {
-        //if (!isHit)
-            Move();
-    }
-
     //나중에 터치&드래그로 바꾸기
     void InputKey()
     {
@@ -228,33 +349,25 @@ public class PlayerController : MonoBehaviour
         {
             if(Direction == 3 || Direction == 2)
                 return;
-
             inputDirection = 2;
-            Debug.Log("왼쪽입력");
         }
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             if (Direction == 2 || Direction == 3)
                 return;
-
             inputDirection = 3;
-            Debug.Log("오른쪽입력");
         }
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             if (Direction == 1 || Direction == 0)
                 return;
-
             inputDirection = 0;
-            Debug.Log("위쪽입력");
         }
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             if (Direction == 0 || Direction == 1)
                 return;
-
             inputDirection = 1;
-            Debug.Log("아래쪽입력");
         }
     }
 
@@ -363,60 +476,46 @@ public class PlayerController : MonoBehaviour
             Coordinate.y = (int)(Coordinate.y / GridSize - 0.5);
     }
 
+    //방향전환
+    void ChangeDir()
+    {
+        if (!setDirCoord) //어디까지 이동 후 방향전환 하는지 설정
+        {
+            DirCoord = Coordinate;
+            if (transform.position.y / GridSize >= DirCoord.y && Direction == 0)
+                DirCoord.y += 1;
+            if (transform.position.y / GridSize <= DirCoord.y && Direction == 1)
+                DirCoord.y -= 1;
+            if (transform.position.x / GridSize <= DirCoord.x && Direction == 2)
+                DirCoord.x -= 1;
+            if (transform.position.x / GridSize >= DirCoord.x && Direction == 3)
+                DirCoord.x += 1;
+            setDirCoord = true;
+        }
+        //다음 그리드까지 이동 후 방향전환
+        if (transform.position.y / GridSize < DirCoord.y && Direction == 0)
+            transform.Translate(MoveVec * MoveSpeed * Time.deltaTime);
+        else if (transform.position.y / GridSize > DirCoord.y && Direction == 1)
+            transform.Translate(MoveVec * MoveSpeed * Time.deltaTime);
+        else if (transform.position.x / GridSize > DirCoord.x && Direction == 2)
+            transform.Translate(MoveVec * MoveSpeed * Time.deltaTime);
+        else if (transform.position.x / GridSize < DirCoord.x && Direction == 3)
+            transform.Translate(MoveVec * MoveSpeed * Time.deltaTime);
+        else
+        {
+            setDirCoord = false;
+            transform.position = new Vector3(Coordinate.x * GridSize, Coordinate.y * GridSize, transform.position.z);
+            Direction = inputDirection;
+            canCangeDir = true;
+        }
+    }
+
     //움직임 (매 프레임마다 실행)
     void Move()
     {
         if (Direction != inputDirection) // 방향전환 있을 경우
         {
-            canCangeDir = false;
-            if (Direction + inputDirection == 1 || Direction + inputDirection == 5) //이동방향과 입력방향이 정반대
-            {
-                //Direction = inputDirection; //그냥 바로 뒤돌아서 감(X)
-                transform.Translate(MoveVec * MoveSpeed * Time.deltaTime); //180도 뒤도는건 못함(꼬리가 있기 때문). 그냥 원래 가던 방향으로 감.
-            }
-            else //그리드단위 이동 후 방향전환
-            {
-                if (!setDirCoord) //어디까지 이동 후 방향전환 하는지 설정
-                {
-                    DirCoord = Coordinate;
-                    if (transform.position.y / GridSize >= DirCoord.y && Direction == 0)
-                        DirCoord.y += 1;
-                    if (transform.position.y / GridSize <= DirCoord.y && Direction == 1)
-                        DirCoord.y -= 1;
-                    if (transform.position.x / GridSize <= DirCoord.x && Direction == 2)
-                        DirCoord.x -= 1;
-                    if (transform.position.x / GridSize >= DirCoord.x && Direction == 3)
-                        DirCoord.x += 1;
-                    setDirCoord = true;
-                }
-                if (!isHit)
-                {
-                    //다음 그리드까지 이동 후 방향전환
-                    if (transform.position.y / GridSize <= DirCoord.y && Direction == 0)
-                        transform.Translate(MoveVec * MoveSpeed * Time.deltaTime);
-                    else if (transform.position.y / GridSize >= DirCoord.y && Direction == 1)
-                        transform.Translate(MoveVec * MoveSpeed * Time.deltaTime);
-                    else if (transform.position.x / GridSize >= DirCoord.x && Direction == 2)
-                        transform.Translate(MoveVec * MoveSpeed * Time.deltaTime);
-                    else if (transform.position.x / GridSize <= DirCoord.x && Direction == 3)
-                        transform.Translate(MoveVec * MoveSpeed * Time.deltaTime);
-                    else
-                    {
-                        setDirCoord = false;
-                        transform.position = new Vector3(Coordinate.x * GridSize, Coordinate.y * GridSize, transform.position.z);
-                        Direction = inputDirection;
-                        canCangeDir = true;
-                    }
-                }
-                else
-                {
-                    setDirCoord = false;
-                    Direction = inputDirection;
-                    transform.position = new Vector3(Coordinate.x * GridSize, Coordinate.y * GridSize, transform.position.z);
-                    canCangeDir = true;
-                    return;
-                }
-            }
+            ChangeDir(); //방향전환
         }
         if (Direction == inputDirection) // 방향전환 없을 경우
         {
@@ -436,8 +535,8 @@ public class PlayerController : MonoBehaviour
                     MoveVec = new Vector3(1, 0, 0);
                     break;
             }
-            //transform.Translate(MoveVec * MoveSpeed * Time.deltaTime);
-            GetComponent<Rigidbody2D>().MovePosition(transform.position + MoveVec * MoveSpeed * Time.deltaTime);
+            transform.Translate(MoveVec * MoveSpeed * Time.deltaTime);
+            //GetComponent<Rigidbody2D>().MovePosition(transform.position + MoveVec * MoveSpeed * Time.deltaTime);
         }
     }
 
