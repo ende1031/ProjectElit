@@ -92,13 +92,11 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Debug.Log(Direction + " / " + inputDirection + " / " + canCangeDir);
-
         //맞았을 때 매 프레임 실행
-        //if (isHit)
-        //{
-        //    Hit();
-        //}
+        if (isHit)
+        {
+            Hit();
+        }
 
         Collision_ball();
         Collision_mob();
@@ -131,28 +129,15 @@ public class PlayerController : MonoBehaviour
     }
 
     //맞았을 때 실행
-    //void Hit()
-    //{
-    //    hitTimer += Time.deltaTime;
-    //    if (HitDirection == inputDirection || Direction + inputDirection == 1 || Direction + inputDirection == 5 || HitDirection + inputDirection == 1 || HitDirection + inputDirection == 5)
-    //    {
-    //        MoveSpeed = 0;
-    //        percentOfCoord = 0;
-    //        if (hitTimer > 0.5f) // 이 시간 주기로 꼬리 하나씩 감소
-    //        {
-    //            RemoveDrop();
-
-    //            hitTimer = 0;
-    //        }
-    //    }
-    //    else if (hitTimer > 0.3f)
-    //    {
-    //        MoveSpeed = orgMoveSpeed;
-    //        isHit = false;
-    //        Direction = inputDirection;
-    //        //transform.position = new Vector3(Coordinate.x * GridSize, Coordinate.y * GridSize, transform.position.z);
-    //    }
-    //}
+    void Hit()
+    {
+        hitTimer += Time.deltaTime;
+        if (hitTimer > 0.5f) // 이 시간 주기로 꼬리 하나씩 감소
+        {
+            RemoveDrop();
+            hitTimer = 0;
+        }
+    }
 
     // 아이템과 같은 좌표에 있을 때
     void Collision_ball()
