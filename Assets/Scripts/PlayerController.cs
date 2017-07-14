@@ -32,6 +32,12 @@ public class PlayerController : MonoBehaviour
     public GameObject Windshot;
     public GameObject Sandshot;
 
+    public GameObject FireBall;
+    public GameObject WaterBall;
+    public GameObject WindBall;
+    public GameObject EarthBall;
+    public GameObject NullBall;
+
     Vector2 Coordinate; //좌표
     int Direction; // 0 : 위, 1 : 아래, 2 : : 왼쪽, 3 : 오른쪽
 
@@ -43,7 +49,7 @@ public class PlayerController : MonoBehaviour
 
     Vector3 mousePos_start; //드래그 시작점
     Vector3 mousePos_end; //드래그 끝날때
-    
+
     List<GameObject> Droplist = new List<GameObject>(); //꼬리 리스트
     List<Coordset> Coordlist = new List<Coordset>(); //지나온 좌표를 저장하는 리스트
     List<int> Dirlist = new List<int>(); //지나온 방향을 저장하는 리스트.
@@ -57,6 +63,7 @@ public class PlayerController : MonoBehaviour
     int HitDirection; //맞았을 때 방향
 
     int NullElementNum;//맨 앞 방해구슬 개수만큼 무시
+    int FieldElementNum;//맵에 존재하는 구슬의 수
 
     // Use this for initialization
     void Start()
@@ -78,6 +85,8 @@ public class PlayerController : MonoBehaviour
         animaitor.SetInteger("direction", Direction);
 
         NullElementNum = 0;
+        FieldElementNum = 0;
+        InvokeRepeating("SpawnElement", 3, 1);
     }
 
     // Update is called once per frame
@@ -173,6 +182,7 @@ public class PlayerController : MonoBehaviour
             InsertDrop(4);
             Destroy(ObjectManager.instance.PlacedObject(Coordinate, "null_ball"));
         }
+        FieldElementNum--;
     }
 
     //몬스터, 나무, 자신의 꼬리를 통과하지 못하게
@@ -202,7 +212,7 @@ public class PlayerController : MonoBehaviour
             if (transform.position.y / GridSize >= Coordinate.y - 0.1 && Direction == 0)
             {
                 isHit = true;
-                if(Direction != inputDirection)
+                if (Direction != inputDirection)
                 {
                     MoveSpeed = orgMoveSpeed;
                     ChangeDir_hit();
@@ -297,12 +307,12 @@ public class PlayerController : MonoBehaviour
     //나중에 터치&드래그로 바꾸기
     void InputKey()
     {
-        if(Input.GetMouseButtonDown(0)) //드래그 시작
+        if (Input.GetMouseButtonDown(0)) //드래그 시작
         {
             mousePos_start = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10);
         }
 
-        if(Input.GetMouseButtonUp(0)) //드래그 끝. 방향전환 적용
+        if (Input.GetMouseButtonUp(0)) //드래그 끝. 방향전환 적용
         {
             mousePos_end = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10);
 
@@ -344,7 +354,7 @@ public class PlayerController : MonoBehaviour
                     return;
                 }
             }
-            
+
         }
 
         //키보드로 방향전환(PC 테스트용)
@@ -362,7 +372,7 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            if(Direction == 3 || Direction == 2)
+            if (Direction == 3 || Direction == 2)
                 return;
             inputDirection = 2;
         }
@@ -599,6 +609,45 @@ public class PlayerController : MonoBehaviour
             Destroy(Droplist[NullElementNum]);
             Droplist.RemoveAt(NullElementNum);
         }
+    }
+
+    //맵에 구슬 스폰
+    void SpawnElement()
+    {
+        if (FieldElementNum > 20) return;
+
+        Vector3 randomPos = new Vector3(Random.Range(-14, 15), Random.Range(-8, 9), 0f);
+        GameObject[] temp = GameObject.FindGameObjectsWithTag("tree");
+        int randomElement = (int)Random.Range(0, 5);
+        for (int i = 0; i < temp.Length; i++)
+        {
+            if (temp[i].transform.position.x == randomPos.x && temp[i].transform.position.y == randomPos.y)
+            {
+                randomPos.Set(Random.Range(-14, 15), Random.Range(-8, 9), 0f);
+                i = 0;
+            }
+        }
+
+        FieldElementNum++;
+        switch (randomElement)
+        {
+            case 0: //불속성
+                Instantiate(FireBall, randomPos, Quaternion.identity);
+                return;
+            case 1: //물속성
+                Instantiate(WaterBall, randomPos, Quaternion.identity);
+                return;
+            case 2: //바람속성
+                Instantiate(WindBall, randomPos, Quaternion.identity);
+                return;
+            case 3: //땅속성
+                Instantiate(EarthBall, randomPos, Quaternion.identity);
+                return;
+            case 4: //방해속성
+                Instantiate(NullBall, randomPos, Quaternion.identity);
+                return;
+        }
+
     }
 
     //꼬리 길이를 리턴
