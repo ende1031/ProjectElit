@@ -18,8 +18,8 @@ public class PlayerController : MonoBehaviour
     }
 
     public float MoveSpeed; //플레이어 속도
-    float orgMoveSpeed; //플레이어의 속도를 임시로 저장 (원래 속도가 얼마였는지 알기 위해)
     public float GridSize; //한 칸의 크기 (단위 : 100분의 1픽셀)
+    float orgMoveSpeed; //플레이어의 속도를 임시로 저장 (원래 속도가 얼마였는지 알기 위해)
 
     public GameObject FireDrop;
     public GameObject WaterDrop;
@@ -32,35 +32,32 @@ public class PlayerController : MonoBehaviour
     public GameObject Windshot;
     public GameObject Sandshot;
 
-    //움직임 및 방향전환 관련 변수
     Vector2 Coordinate; //좌표
-    Vector3 MoveVec; //방향 벡터
     int Direction; // 0 : 위, 1 : 아래, 2 : : 왼쪽, 3 : 오른쪽
+
+    Vector3 MoveVec; //방향 벡터
     Vector2 DirCoord; //방향전환용 임시좌표
     bool setDirCoord;
-    int HitDirection; // 맞았을 때 방향
+    int inputDirection;//방향전환용
+    bool canCangeDir; //현재 방향전환 가능한지
 
-    //키입력 관련
-    int inputDirection;
+    Vector3 mousePos_start; //드래그 시작점
+    Vector3 mousePos_end; //드래그 끝날때
+    
+    List<GameObject> Droplist = new List<GameObject>(); //꼬리 리스트
+    List<Coordset> Coordlist = new List<Coordset>(); //지나온 좌표를 저장하는 리스트
+    List<int> Dirlist = new List<int>(); //지나온 방향을 저장하는 리스트.
 
-    //꼬리 리스트
-    List<GameObject> Droplist = new List<GameObject>();
-    //지나온 좌표를 저장하는 리스트
-    List<Coordset> Coordlist = new List<Coordset>();
-    //지나온 방향을 저장하는 리스트 이걸로 버그가 해결된다면 좋겠습니다.
-    List<int> Dirlist = new List<int>();
-
-    //꼬리를 움직이게 하기 위한 변수
-    Coordset PlayerCoodset;
+    Coordset PlayerCoodset; //꼬리를 움직이게 하기 위한 변수들
     Vector2 OldCoord;
     float percentOfCoord;
 
-    bool isHit;
+    bool isHit; //충돌중인지
     float hitTimer;
-
-    bool canCangeDir;
+    int HitDirection; //맞았을 때 방향
 
     int NullElementNum;//맨 앞 방해구슬 개수만큼 무시
+
     // Use this for initialization
     void Start()
     {
@@ -83,46 +80,46 @@ public class PlayerController : MonoBehaviour
         NullElementNum = 0;
     }
 
-    //충돌처리
-    //void OnTriggerEnter2D(Collider2D col)
-    //{
-    //    //꼬리 구슬 추가
-    //    if (col.gameObject.tag == "fire_ball")
-    //    {
-    //        Destroy(col.gameObject);
-    //        InsertDrop(0);
-    //    }
-    //    else if (col.gameObject.tag == "wind_ball")
-    //    {
-    //        Destroy(col.gameObject);
-    //        InsertDrop(2);
-    //    }
-    //    else if (col.gameObject.tag == "water_ball")
-    //    {
-    //        Destroy(col.gameObject);
-    //        InsertDrop(1);
-    //    }
-    //    else if (col.gameObject.tag == "sand_ball")
-    //    {
-    //        Destroy(col.gameObject);
-    //        InsertDrop(3);
-    //    }
-    //    else if (col.gameObject.tag == "null_ball")
-    //    {
-    //        Destroy(col.gameObject);
-    //        InsertDrop(4);
-    //    }
+    // Update is called once per frame
+    void Update()
+    {
+        //Debug.Log(Direction + " / " + inputDirection + " / " + canCangeDir);
 
-    //    else if (col.gameObject.tag == "tree" || col.gameObject.tag == "monster" || col.gameObject.tag == "tail")
-    //    {
-    //        hitTimer = 1.0f;
-    //        isHit = true;
-    //        HitDirection = Direction;
+        //맞았을 때 매 프레임 실행
+        //if (isHit)
+        //{
+        //    Hit();
+        //}
 
-    //        canCangeDir = true;
-    //        transform.position = new Vector3(Coordinate.x * GridSize, Coordinate.y * GridSize, transform.position.z);
-    //    }
-    //}
+        Collision_ball();
+        Collision_mob();
+
+        if (!isHit)
+            Move();
+
+        MoveTails();
+
+        if (canCangeDir)
+        {
+            InputKey();
+        }
+
+        SetCoordinate();
+
+        //맨 앞의 방해구슬 개수 체크
+        if (GetTailLength() > 0 && GetTailLength() != NullElementNum) //꼬리가 0개보다 많을 때만 검사
+        {
+            if (Droplist[NullElementNum].GetComponent<ElementDrop>().Element == 4)
+            {
+                NullElementNum++;
+            }
+        }
+
+        if (Input.GetKeyUp(KeyCode.Space)) // 불 바람 물 땅 마법 사용
+        {
+            Attack();
+        }
+    }
 
     //맞았을 때 실행
     //void Hit()
@@ -148,6 +145,7 @@ public class PlayerController : MonoBehaviour
     //    }
     //}
 
+    // 아이템과 같은 좌표에 있을 때
     void Collision_ball()
     {
         if (ObjectManager.instance.isPlace(Coordinate, "fire_ball"))
@@ -177,6 +175,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //몬스터, 나무, 자신의 꼬리를 통과하지 못하게
     void Collision_mob()
     {
         Vector2 temp = Coordinate;
@@ -202,9 +201,7 @@ public class PlayerController : MonoBehaviour
             MoveSpeed = orgMoveSpeed;
             if (transform.position.y / GridSize >= Coordinate.y - 0.1 && Direction == 0)
             {
-                //MoveSpeed = 0;
                 isHit = true;
-
                 if(Direction != inputDirection)
                 {
                     MoveSpeed = orgMoveSpeed;
@@ -213,9 +210,7 @@ public class PlayerController : MonoBehaviour
             }
             if (transform.position.y / GridSize <= Coordinate.y + 0.1 && Direction == 1)
             {
-                //MoveSpeed = 0;
                 isHit = true;
-
                 if (Direction != inputDirection)
                 {
                     MoveSpeed = orgMoveSpeed;
@@ -224,9 +219,7 @@ public class PlayerController : MonoBehaviour
             }
             if (transform.position.x / GridSize <= Coordinate.x + 0.1 && Direction == 2)
             {
-                //MoveSpeed = 0;
                 isHit = true;
-
                 if (Direction != inputDirection)
                 {
                     MoveSpeed = orgMoveSpeed;
@@ -235,9 +228,7 @@ public class PlayerController : MonoBehaviour
             }
             if (transform.position.x / GridSize >= Coordinate.x - 0.1 && Direction == 3)
             {
-                //MoveSpeed = 0;
                 isHit = true;
-
                 if (Direction != inputDirection)
                 {
                     MoveSpeed = orgMoveSpeed;
@@ -252,7 +243,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    //방향전환
+    //충돌시 방향전환
     void ChangeDir_hit()
     {
         if (!setDirCoord) //어디까지 이동 후 방향전환 하는지 설정
@@ -277,46 +268,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        Debug.Log(Direction + " / " + inputDirection + " / " + canCangeDir);
-        //맞았을 때 매 프레임 실행
-        //if (isHit)
-        //{
-        //    Hit();
-        //}
-
-        Collision_ball();
-        Collision_mob();
-
-        if (!isHit)
-            Move();
-
-        MoveTails();
-
-        if(canCangeDir)
-        {
-            InputKey();
-        }
-
-        SetCoordinate();
-
-        //맨 앞의 방해구슬 개수 체크
-        if (GetTailLength() > 0 && GetTailLength() != NullElementNum) //꼬리가 0개보다 많을 때만 검사
-        {
-            if (Droplist[NullElementNum].GetComponent<ElementDrop>().Element == 4)
-            {
-                NullElementNum++;
-            }
-        }
-
-        if (Input.GetKeyUp(KeyCode.Space)) // 불 바람 물 땅 마법 사용
-        {
-            Attack();
-        }
-    }
-
+    //공격. 버튼UI에서 이 함수 실행
     public void Attack()
     {
         if (GetElement(0) == 0)
@@ -345,18 +297,57 @@ public class PlayerController : MonoBehaviour
     //나중에 터치&드래그로 바꾸기
     void InputKey()
     {
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        if(Input.GetMouseButtonDown(0)) //드래그 시작
         {
-            if(Direction == 3 || Direction == 2)
-                return;
-            inputDirection = 2;
+            mousePos_start = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10);
         }
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+
+        if(Input.GetMouseButtonUp(0)) //드래그 끝. 방향전환 적용
         {
-            if (Direction == 2 || Direction == 3)
-                return;
-            inputDirection = 3;
+            mousePos_end = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10);
+
+            if (Mathf.Abs(mousePos_start.x - mousePos_end.x) < Mathf.Abs(mousePos_start.y - mousePos_end.y)) // y축 이동
+            {
+                if (mousePos_start.y < mousePos_end.y) //아래쪽 이동
+                {
+                    if (Direction == 1 || Direction == 0)
+                        return;
+                    inputDirection = 0;
+                }
+                else if (mousePos_start.y > mousePos_end.y) //위쪽 이동
+                {
+                    if (Direction == 0 || Direction == 1)
+                        return;
+                    inputDirection = 1;
+                }
+                else //마우스를 움직인 값이 0일때
+                {
+                    return;
+                }
+            }
+            else //x축 이동
+            {
+                if (mousePos_start.x > mousePos_end.x) //왼쪽 이동
+                {
+                    if (Direction == 3 || Direction == 2)
+                        return;
+                    inputDirection = 2;
+                }
+                else if (mousePos_start.x < mousePos_end.x) //오늘쪽 이동
+                {
+                    if (Direction == 2 || Direction == 3)
+                        return;
+                    inputDirection = 3;
+                }
+                else //마우스를 움직인 값이 0일때
+                {
+                    return;
+                }
+            }
+            
         }
+
+        //키보드로 방향전환(PC 테스트용)
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             if (Direction == 1 || Direction == 0)
@@ -369,14 +360,27 @@ public class PlayerController : MonoBehaviour
                 return;
             inputDirection = 1;
         }
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            if(Direction == 3 || Direction == 2)
+                return;
+            inputDirection = 2;
+        }
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            if (Direction == 2 || Direction == 3)
+                return;
+            inputDirection = 3;
+        }
     }
 
-    public int getDirection() //Direction 값 반환
+    //Direction 값 반환. 다른 클래스에서 사용할것같음
+    public int getDirection()
     {
         return Direction;
     }
 
-    //움직여라 꼬리꼬리 (매 프레임마다 실행)
+    //꼬리 움직이기
     void MoveTails()
     {
         //현재 이동 방향별 좌표세트 설정
@@ -422,7 +426,6 @@ public class PlayerController : MonoBehaviour
         }
 
         //꼬리 움직이기
-
         for (int i = 0; i < Droplist.Count; i++)
         {
             if (i < Coordlist.Count)
@@ -448,6 +451,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        //방향 리스트에 방향 저장.
         for (int i = 0; i < Droplist.Count; i++)
         {
             Droplist[i].GetComponent<ElementDrop>().Direction = Dirlist[i];
@@ -461,7 +465,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    //Position을 좌표로 바꿔주는 함수 (매 프레임마다 실행)
+    //Position을 GridSize단위의 좌표로 바꿔주는 함수
     void SetCoordinate()
     {
         Coordinate.x = transform.position.x;
@@ -510,7 +514,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    //움직임 (매 프레임마다 실행)
+    //움직임
     void Move()
     {
         if (Direction != inputDirection) // 방향전환 있을 경우
@@ -536,7 +540,7 @@ public class PlayerController : MonoBehaviour
                     break;
             }
             transform.Translate(MoveVec * MoveSpeed * Time.deltaTime);
-            //GetComponent<Rigidbody2D>().MovePosition(transform.position + MoveVec * MoveSpeed * Time.deltaTime);
+            //GetComponent<Rigidbody2D>().MovePosition(transform.position + MoveVec * MoveSpeed * Time.deltaTime); //Rigidbody를 사용할경우 이걸로
         }
     }
 

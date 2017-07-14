@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class CoordinateCollider : MonoBehaviour {
 
-    public bool isTriger;
     public Vector2 Size;
 
     Vector2 Coordinate;
