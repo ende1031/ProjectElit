@@ -283,21 +283,25 @@ public class PlayerController : MonoBehaviour
     {
         if (GetElement(0) == 0)
         {
+            animaitor.SetInteger("Attack_element", 0);
             Instantiate(Fireshot, new Vector3(transform.position.x, transform.position.y + 0.5f, 0), transform.rotation);
             GameManager.instance.PlaySE("Fire");
         }
         else if (GetElement(0) == 1)
         {
+            animaitor.SetInteger("Attack_element", 1);
             Instantiate(Watershot, new Vector3(transform.position.x, transform.position.y + 0.5f, 0), transform.rotation);
             GameManager.instance.PlaySE("Water");
         }
         else if (GetElement(0) == 2)
         {
+            animaitor.SetInteger("Attack_element", 2);
             Instantiate(Windshot, new Vector3(transform.position.x, transform.position.y + 0.5f, 0), transform.rotation);
             GameManager.instance.PlaySE("Wind");
         }
         else if (GetElement(0) == 3)
         {
+            animaitor.SetInteger("Attack_element", 3);
             Instantiate(Sandshot, new Vector3(transform.position.x, transform.position.y + 0.5f, 0), transform.rotation);
             GameManager.instance.PlaySE("Sand");
         }
