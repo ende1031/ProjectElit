@@ -32,6 +32,9 @@ public class PlayerController : MonoBehaviour
     public GameObject Windshot;
     public GameObject Sandshot;
 
+    public GameObject NormalCanvas;
+    public GameObject GameOverCanvas;
+
     Vector2 Coordinate; //좌표
     int Direction; // 0 : 위, 1 : 아래, 2 : : 왼쪽, 3 : 오른쪽
 
@@ -58,6 +61,8 @@ public class PlayerController : MonoBehaviour
 
     int NullElementNum;//맨 앞 방해구슬 개수만큼 무시
 
+    bool GameOver;
+
     // Use this for initialization
     void Start()
     {
@@ -78,44 +83,49 @@ public class PlayerController : MonoBehaviour
         animaitor.SetInteger("direction", Direction);
 
         NullElementNum = 0;
+
+        GameOver = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        //맞았을 때 매 프레임 실행
-        if (isHit)
+        if (!GameOver)
         {
-            Hit();
-        }
-
-        Collision_ball();
-        Collision_mob();
-
-        if (!isHit)
-            Move();
-
-        MoveTails();
-
-        if (canCangeDir)
-        {
-            InputKey();
-        }
-
-        SetCoordinate();
-
-        //맨 앞의 방해구슬 개수 체크
-        if (GetTailLength() > 0 && GetTailLength() != NullElementNum) //꼬리가 0개보다 많을 때만 검사
-        {
-            if (Droplist[NullElementNum].GetComponent<ElementDrop>().Element == 4)
+            //맞았을 때 매 프레임 실행
+            if (isHit)
             {
-                NullElementNum++;
+                Hit();
             }
-        }
 
-        if (Input.GetKeyUp(KeyCode.Space)) // 불 바람 물 땅 마법 사용
-        {
-            Attack();
+            Collision_ball();
+            Collision_mob();
+
+            if (!isHit)
+                Move();
+
+            MoveTails();
+
+            if (canCangeDir)
+            {
+                InputKey();
+            }
+
+            SetCoordinate();
+
+            //맨 앞의 방해구슬 개수 체크
+            if (GetTailLength() > 0 && GetTailLength() != NullElementNum) //꼬리가 0개보다 많을 때만 검사
+            {
+                if (Droplist[NullElementNum].GetComponent<ElementDrop>().Element == 4)
+                {
+                    NullElementNum++;
+                }
+            }
+
+            if (Input.GetKeyUp(KeyCode.Space)) // 불 바람 물 땅 마법 사용
+            {
+                Attack();
+            }
         }
     }
 
@@ -125,7 +135,14 @@ public class PlayerController : MonoBehaviour
         hitTimer += Time.deltaTime;
         if (hitTimer > 0.5f) // 이 시간 주기로 꼬리 하나씩 감소
         {
-            RemoveDrop();
+            if (GetTailLength() == 0 || GetTailLength() == NullElementNum)
+            {
+                Die();
+            }
+            else if (GetTailLength() > 0)
+            {
+                RemoveDrop();
+            }
             hitTimer = 0;
         }
     }
@@ -338,7 +355,6 @@ public class PlayerController : MonoBehaviour
                     return;
                 }
             }
-
         }
 
         //키보드로 방향전환(PC 테스트용)
@@ -594,17 +610,31 @@ public class PlayerController : MonoBehaviour
             Droplist.RemoveAt(NullElementNum);
         }
     }
-    
+
+    //유 다희
+    void Die()
+    {
+        GameOver = true;
+        NormalCanvas.SetActive(false);
+        GameOverCanvas.SetActive(true);
+    }
+
     //꼬리 길이를 리턴
-    int GetTailLength()
+    public int GetTailLength()
     {
         return Droplist.Count;
     }
 
     //방해구슬을 제외한 e+1번째 꼬리의 속성을 리턴. 0을 넣으면 첫번째를 리턴
-    int GetElement(int e)
+    public int GetElement(int e)
     {
         if (Droplist.Count == NullElementNum) return 5; //임시방편으로 반환할 값이 없으면 5(비어있는 속성값)를 반환.
         return Droplist[e + NullElementNum].GetComponent<ElementDrop>().Element;
+    }
+
+    //플레이어가 죽었는지 안죽었는지 다른 스크립트에서 알고싶을때 사용
+    public bool GetGameOver()
+    {
+        return GameOver;
     }
 }
