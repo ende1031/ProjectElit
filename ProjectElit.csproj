@@ -81,6 +81,7 @@
     <Compile Include="Assets\Scripts\AutoPositionZ.cs" />
     <Compile Include="Assets\Scripts\CamaraController.cs" />
     <Compile Include="Assets\Scripts\CoordinateCollider.cs" />
+    <Compile Include="Assets\Scripts\ElementCreate.cs" />
     <Compile Include="Assets\Scripts\ElementDrop.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\ObjectManager.cs" />

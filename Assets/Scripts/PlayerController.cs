@@ -32,12 +32,6 @@ public class PlayerController : MonoBehaviour
     public GameObject Windshot;
     public GameObject Sandshot;
 
-    public GameObject FireBall;
-    public GameObject WaterBall;
-    public GameObject WindBall;
-    public GameObject EarthBall;
-    public GameObject NullBall;
-
     Vector2 Coordinate; //좌표
     int Direction; // 0 : 위, 1 : 아래, 2 : : 왼쪽, 3 : 오른쪽
 
@@ -63,7 +57,6 @@ public class PlayerController : MonoBehaviour
     int HitDirection; //맞았을 때 방향
 
     int NullElementNum;//맨 앞 방해구슬 개수만큼 무시
-    int FieldElementNum;//맵에 존재하는 구슬의 수
 
     // Use this for initialization
     void Start()
@@ -85,8 +78,6 @@ public class PlayerController : MonoBehaviour
         animaitor.SetInteger("direction", Direction);
 
         NullElementNum = 0;
-        FieldElementNum = 0;
-        InvokeRepeating("SpawnElement", 3, 1);
     }
 
     // Update is called once per frame
@@ -146,28 +137,32 @@ public class PlayerController : MonoBehaviour
         {
             InsertDrop(0);
             Destroy(ObjectManager.instance.PlacedObject(Coordinate, "fire_ball"));
+            ObjectManager.instance.FieldElementNum--;
         }
         else if (ObjectManager.instance.isPlace(Coordinate, "water_ball"))
         {
             InsertDrop(1);
             Destroy(ObjectManager.instance.PlacedObject(Coordinate, "water_ball"));
+            ObjectManager.instance.FieldElementNum--;
         }
         else if (ObjectManager.instance.isPlace(Coordinate, "wind_ball"))
         {
             InsertDrop(2);
             Destroy(ObjectManager.instance.PlacedObject(Coordinate, "wind_ball"));
+            ObjectManager.instance.FieldElementNum--;
         }
         else if (ObjectManager.instance.isPlace(Coordinate, "sand_ball"))
         {
             InsertDrop(3);
             Destroy(ObjectManager.instance.PlacedObject(Coordinate, "sand_ball"));
+            ObjectManager.instance.FieldElementNum--;
         }
         else if (ObjectManager.instance.isPlace(Coordinate, "null_ball"))
         {
             InsertDrop(4);
             Destroy(ObjectManager.instance.PlacedObject(Coordinate, "null_ball"));
+            ObjectManager.instance.FieldElementNum--;
         }
-        FieldElementNum--;
     }
 
     //몬스터, 나무, 자신의 꼬리를 통과하지 못하게
@@ -599,46 +594,7 @@ public class PlayerController : MonoBehaviour
             Droplist.RemoveAt(NullElementNum);
         }
     }
-
-    //맵에 구슬 스폰
-    void SpawnElement()
-    {
-        if (FieldElementNum > 20) return;
-
-        Vector3 randomPos = new Vector3(Random.Range(-14, 15), Random.Range(-8, 9), 0f);
-        GameObject[] temp = GameObject.FindGameObjectsWithTag("tree");
-        int randomElement = (int)Random.Range(0, 5);
-        for (int i = 0; i < temp.Length; i++)
-        {
-            if (temp[i].transform.position.x == randomPos.x && temp[i].transform.position.y == randomPos.y)
-            {
-                randomPos.Set(Random.Range(-14, 15), Random.Range(-8, 9), 0f);
-                i = 0;
-            }
-        }
-
-        FieldElementNum++;
-        switch (randomElement)
-        {
-            case 0: //불속성
-                Instantiate(FireBall, randomPos, Quaternion.identity);
-                return;
-            case 1: //물속성
-                Instantiate(WaterBall, randomPos, Quaternion.identity);
-                return;
-            case 2: //바람속성
-                Instantiate(WindBall, randomPos, Quaternion.identity);
-                return;
-            case 3: //땅속성
-                Instantiate(EarthBall, randomPos, Quaternion.identity);
-                return;
-            case 4: //방해속성
-                Instantiate(NullBall, randomPos, Quaternion.identity);
-                return;
-        }
-
-    }
-
+    
     //꼬리 길이를 리턴
     int GetTailLength()
     {
