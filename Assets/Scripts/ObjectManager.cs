@@ -38,7 +38,7 @@ public class ObjectManager : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        FieldElementNum = 0;
+
     }
 	
 	// Update is called once per frame

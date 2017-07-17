@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ElementCreate : MonoBehaviour
+public class ElementSpawn : MonoBehaviour
 {
 
     public GameObject FireBall;
@@ -14,6 +14,7 @@ public class ElementCreate : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        ObjectManager.instance.FieldElementNum = 0;
         InvokeRepeating("SpawnElement", 3, 1);
     }
 
@@ -35,6 +36,8 @@ public class ElementCreate : MonoBehaviour
         }
 
         ObjectManager.instance.FieldElementNum++;
+        Debug.Log(ObjectManager.instance.FieldElementNum);
+
         switch (randomElement)
         {
             case 0: //불속성
