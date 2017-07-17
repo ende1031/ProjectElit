@@ -11,11 +11,14 @@ public class ElementSpawn : MonoBehaviour
     public GameObject EarthBall;
     public GameObject NullBall;
 
+    float GridSize;
+
     // Use this for initialization
     void Start()
     {
         ObjectManager.instance.FieldElementNum = 0;
         InvokeRepeating("SpawnElement", 3, 1);
+        GridSize = GameObject.Find("Player").GetComponent<PlayerController>().GridSize;
     }
 
     // Update is called once per frame
@@ -28,15 +31,15 @@ public class ElementSpawn : MonoBehaviour
     {
         if (ObjectManager.instance.FieldElementNum > 20) return;
 
-        Vector2 randomPos = new Vector3(Random.Range(-14, 15), Random.Range(-8, 9));
+        Vector2 randomPos = new Vector2(Random.Range(-14, 15), Random.Range(-8, 9));
         int randomElement = (int)Random.Range(0, 5);
-        while (ObjectManager.instance.isPlace(randomPos, "tree"))
+        while (ObjectManager.instance.isPlace(Coordinate(randomPos), "tree"))
         {
             randomPos.Set(Random.Range(-14, 15), Random.Range(-8, 9));
         }
 
         ObjectManager.instance.FieldElementNum++;
-        Debug.Log(ObjectManager.instance.FieldElementNum);
+        //Debug.Log(ObjectManager.instance.FieldElementNum);
 
         switch (randomElement)
         {
@@ -56,5 +59,21 @@ public class ElementSpawn : MonoBehaviour
                 Instantiate(NullBall, randomPos, Quaternion.identity);
                 return;
         }
+    }
+
+    //GridSize단위의 좌표로 바꿔주는 함수
+    Vector2 Coordinate(Vector2 c)
+    {
+        c.x = transform.position.x;
+        c.y = transform.position.y;
+        if (c.x >= 0)
+            c.x = (int)(c.x / GridSize + 0.5);
+        else
+            c.x = (int)(c.x / GridSize - 0.5);
+        if (c.y >= 0)
+            c.y = (int)(c.y / GridSize + 0.5);
+        else
+            c.y = (int)(c.y / GridSize - 0.5);
+        return c;
     }
 }

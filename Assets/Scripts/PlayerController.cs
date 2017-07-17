@@ -100,6 +100,7 @@ public class PlayerController : MonoBehaviour
 
             Collision_ball();
             Collision_mob();
+            Collision_tail();
 
             if (!isHit)
                 Move();
@@ -182,10 +183,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    //몬스터, 나무, 자신의 꼬리를 통과하지 못하게
+    //몬스터, 나무를 통과하지 못하게
     void Collision_mob()
     {
         Vector2 temp = Coordinate;
+        //int tempDir = Direction;
+
         switch (Direction)
         {
             case 0: //위
@@ -202,51 +205,75 @@ public class PlayerController : MonoBehaviour
                 break;
         }
 
-        if (ObjectManager.instance.isPlace(temp, "monster") || ObjectManager.instance.isPlace(temp, "tree") || ObjectManager.instance.isPlace(temp, "tail"))
+        if (ObjectManager.instance.isPlace(temp, "monster") || ObjectManager.instance.isPlace(temp, "tree"))
         {
             isHit = false;
             MoveSpeed = orgMoveSpeed;
             if (transform.position.y / GridSize >= Coordinate.y - 0.1 && Direction == 0)
-            {
-                isHit = true;
-                if (Direction != inputDirection)
-                {
-                    MoveSpeed = orgMoveSpeed;
-                    ChangeDir_hit();
-                }
-            }
+                Colliding();
             if (transform.position.y / GridSize <= Coordinate.y + 0.1 && Direction == 1)
-            {
-                isHit = true;
-                if (Direction != inputDirection)
-                {
-                    MoveSpeed = orgMoveSpeed;
-                    ChangeDir_hit();
-                }
-            }
+                Colliding();
             if (transform.position.x / GridSize <= Coordinate.x + 0.1 && Direction == 2)
-            {
-                isHit = true;
-                if (Direction != inputDirection)
-                {
-                    MoveSpeed = orgMoveSpeed;
-                    ChangeDir_hit();
-                }
-            }
+                Colliding();
             if (transform.position.x / GridSize >= Coordinate.x - 0.1 && Direction == 3)
-            {
-                isHit = true;
-                if (Direction != inputDirection)
-                {
-                    MoveSpeed = orgMoveSpeed;
-                    ChangeDir_hit();
-                }
-            }
+                Colliding();
         }
         else
         {
             isHit = false;
             MoveSpeed = orgMoveSpeed;
+        }
+    }
+
+    //꼬리 자르기
+    void Collision_tail()
+    {
+        if (ObjectManager.instance.isPlace(Coordinate, "tail"))
+        {
+            int temp = ObjectManager.instance.PlacedObject(Coordinate, "tail").GetComponent<ElementDrop>().DropNumber;
+            Debug.Log(temp + "번째 꼬리와 충돌");
+
+            for (int i = 0; i < Droplist.Count; i++)
+            {
+                if(i >= temp)
+                {
+                    RemoveDropAt(temp);
+                }
+            }
+        }
+    }
+
+    //몬스터, 나무에 충돌중일때 프레임마다 실행
+    void Colliding()
+    {
+        isHit = true;
+        if (Direction != inputDirection)
+        {
+            Vector2 temp = Coordinate;
+            switch (inputDirection)
+            {
+                case 0: //위
+                    temp.y += 1;
+                    break;
+                case 1: //아래
+                    temp.y -= 1;
+                    break;
+                case 2: //왼
+                    temp.x -= 1;
+                    break;
+                case 3: //오른
+                    temp.x += 1;
+                    break;
+            }
+            if (ObjectManager.instance.isPlace(temp, "monster") || ObjectManager.instance.isPlace(temp, "tree"))
+            {
+                return; //구석에 박혀서 방향전환하려는 방향에도 벽이 있을 경우 그쪽으론 방향전환 안됨
+            }
+            else
+            {
+                MoveSpeed = orgMoveSpeed;
+                ChangeDir_hit();
+            }
         }
     }
 
@@ -271,6 +298,7 @@ public class PlayerController : MonoBehaviour
             setDirCoord = false;
             transform.position = new Vector3(Coordinate.x * GridSize, Coordinate.y * GridSize, transform.position.z);
             Direction = inputDirection;
+            animaitor.SetInteger("direction", Direction);
             canCangeDir = true;
         }
     }
@@ -438,6 +466,8 @@ public class PlayerController : MonoBehaviour
         //꼬리 움직이기
         for (int i = 0; i < Droplist.Count; i++)
         {
+            Droplist[i].GetComponent<ElementDrop>().DropNumber = i;
+
             if (i < Coordlist.Count)
             {
                 Vector3 temp = Coordlist[i].Old * GridSize;
@@ -608,6 +638,16 @@ public class PlayerController : MonoBehaviour
         {
             Destroy(Droplist[NullElementNum]);
             Droplist.RemoveAt(NullElementNum);
+        }
+    }
+
+    //e번째 꼬리 구슬 제거
+    void RemoveDropAt(int e)
+    {
+        if (Droplist.Count > e)
+        {
+            Destroy(Droplist[e]);
+            Droplist.RemoveAt(e);
         }
     }
 

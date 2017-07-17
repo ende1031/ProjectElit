@@ -14,6 +14,8 @@ public class ElementDrop : MonoBehaviour {
     public int Direction; // 0 : 위, 1 : 아래, 2 : : 왼쪽, 3 : 오른쪽
     Vector3 MoveVec; //방향 벡터
 
+    public int DropNumber; //이 꼬리구슬이 앞에서 몇 번째 구슬인지
+
     // Use this for initialization
     void Start () {
         GridSize = GameObject.Find("Player").GetComponent<PlayerController>().GridSize;
