@@ -6,6 +6,10 @@ public class PlayerController : MonoBehaviour
 {
     private Animator animaitor;
 
+    // 공격 애니메이션 -> 기본 애니메이션으로 돌아오기 위한 변수
+    bool attack_ing = false;
+    float attack_delay = 0;
+
     public class Coordset
     {
         public Coordset(Vector2 o, Vector2 n)
@@ -127,6 +131,19 @@ public class PlayerController : MonoBehaviour
             {
                 Attack();
             }
+        }
+
+        // 공격 애니메이션 -> 기본 애니메이션으로 돌아오기 위한 변수
+        if (attack_ing)
+        {
+            attack_delay += Time.deltaTime;
+        }
+
+        if (attack_delay > 1.0f)
+        {
+            animaitor.SetInteger("Attack_element", 10);
+            attack_ing = false;
+            attack_delay = 0;
         }
     }
 
@@ -306,26 +323,31 @@ public class PlayerController : MonoBehaviour
     //공격. 버튼UI에서 이 함수 실행
     public void Attack()
     {
+  
         if (GetElement(0) == 0)
         {
+            attack_ing = true;
             animaitor.SetInteger("Attack_element", 0);
             Instantiate(Fireshot, new Vector3(transform.position.x, transform.position.y + 0.5f, 0), transform.rotation);
             GameManager.instance.PlaySE("Fire");
         }
         else if (GetElement(0) == 1)
         {
+            attack_ing = true;
             animaitor.SetInteger("Attack_element", 1);
             Instantiate(Watershot, new Vector3(transform.position.x, transform.position.y + 0.5f, 0), transform.rotation);
             GameManager.instance.PlaySE("Water");
         }
         else if (GetElement(0) == 2)
         {
+            attack_ing = true;
             animaitor.SetInteger("Attack_element", 2);
             Instantiate(Windshot, new Vector3(transform.position.x, transform.position.y + 0.5f, 0), transform.rotation);
             GameManager.instance.PlaySE("Wind");
         }
         else if (GetElement(0) == 3)
         {
+            attack_ing = true;
             animaitor.SetInteger("Attack_element", 3);
             Instantiate(Sandshot, new Vector3(transform.position.x, transform.position.y + 0.5f, 0), transform.rotation);
             GameManager.instance.PlaySE("Sand");
