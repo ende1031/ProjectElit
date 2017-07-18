@@ -10,6 +10,9 @@ public class PlayerController : MonoBehaviour
     bool attack_ing = false;
     float attack_delay = 0;
 
+    bool hit_ing = false;
+    float hit_delay = 0;
+
     public class Coordset
     {
         public Coordset(Vector2 o, Vector2 n)
@@ -145,6 +148,18 @@ public class PlayerController : MonoBehaviour
             attack_ing = false;
             attack_delay = 0;
         }
+
+        if (hit_ing)
+        {
+            hit_delay += Time.deltaTime;
+        }
+
+        if (hit_delay > 0.5f)
+        {
+            animaitor.SetBool("Hitted", false);
+            hit_ing = false;
+            hit_delay = 0;
+        }
     }
 
     //맞았을 때 실행
@@ -153,6 +168,9 @@ public class PlayerController : MonoBehaviour
         hitTimer += Time.deltaTime;
         if (hitTimer > 0.5f) // 이 시간 주기로 꼬리 하나씩 감소
         {
+            animaitor.SetBool("Hitted", true);
+            hit_ing = true;
+
             if (GetTailLength() == 0 || GetTailLength() == NullElementNum)
             {
                 Die();
@@ -163,6 +181,7 @@ public class PlayerController : MonoBehaviour
             }
             hitTimer = 0;
         }
+       
     }
 
     // 아이템과 같은 좌표에 있을 때
@@ -676,6 +695,7 @@ public class PlayerController : MonoBehaviour
     //유 다희
     void Die()
     {
+        animaitor.SetBool("Alive", false);
         GameOver = true;
         NormalCanvas.SetActive(false);
         GameOverCanvas.SetActive(true);
