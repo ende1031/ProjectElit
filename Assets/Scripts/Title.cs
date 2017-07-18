@@ -23,6 +23,6 @@ public class Title : MonoBehaviour
 
     public void GameStart() //나중에 다른데서 쓸수도 있을 것 같아서 따로 만들어둠.
     {
-        GameManager.instance.FadeAndLoadScene("Stage1");
+        GameManager.instance.FadeAndLoadScene("SelectStage");
     }
 }

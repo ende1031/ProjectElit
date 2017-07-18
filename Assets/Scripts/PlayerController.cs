@@ -98,9 +98,9 @@ public class PlayerController : MonoBehaviour
         {
             //맞았을 때 매 프레임 실행
             if (isHit)
-            {
                 Hit();
-            }
+            else
+                hitTimer = 0;
 
             Collision_ball();
             Collision_mob();
@@ -282,7 +282,7 @@ public class PlayerController : MonoBehaviour
                     temp.x += 1;
                     break;
             }
-            if (ObjectManager.instance.isPlace(temp, "monster") || ObjectManager.instance.isPlace(temp, "tree"))
+            if (ObjectManager.instance.isPlace(temp, "monster") || ObjectManager.instance.isPlace(temp, "tree") || ObjectManager.instance.isPlace(temp, "tail"))
             {
                 return; //구석에 박혀서 방향전환하려는 방향에도 벽이 있을 경우 그쪽으론 방향전환 안됨
             }
