@@ -8,8 +8,12 @@ public class ElementSpawn : MonoBehaviour
     public GameObject FireBall;
     public GameObject WaterBall;
     public GameObject WindBall;
-    public GameObject EarthBall;
-    public GameObject NullBall;
+    public GameObject SandBall;
+
+    public GameObject NullBall_fire;
+    public GameObject NullBall_water;
+    public GameObject NullBall_wind;
+    public GameObject NullBall_sand;
 
     // Use this for initialization
     void Start()
@@ -26,12 +30,13 @@ public class ElementSpawn : MonoBehaviour
 
     void SpawnElement()
     {
-        if (ObjectManager.instance.FieldElementNum > 50) return;
+        if (ObjectManager.instance.FieldElementNum > 5) return;
         int tryNum = 0;
         Vector2 randomPos = new Vector3(Random.Range(-14, 15), Random.Range(-8, 9));
         int randomElement = (int)Random.Range(0, 5);
-        while (ObjectManager.instance.isPlace(randomPos, "tree") || ObjectManager.instance.isPlace(randomPos, "monster") || ObjectManager.instance.isPlace(randomPos, "tail") 
-            || ObjectManager.instance.isPlace(randomPos, "null_ball")
+        int randomNullElement = (int)Random.Range(0, 5);
+        while (ObjectManager.instance.isPlace(randomPos, "tree") || ObjectManager.instance.isPlace(randomPos, "monster")
+            || ObjectManager.instance.isPlace(randomPos, "tail") || ObjectManager.instance.isPlace(randomPos, "null_ball")
             || ObjectManager.instance.isPlace(randomPos, "fire_ball") || ObjectManager.instance.isPlace(randomPos, "water_ball")
             || ObjectManager.instance.isPlace(randomPos, "sand_ball") || ObjectManager.instance.isPlace(randomPos, "wind_ball"))
         {
@@ -43,23 +48,26 @@ public class ElementSpawn : MonoBehaviour
         tryNum = 0;
         ObjectManager.instance.FieldElementNum++;
 
-        switch (randomElement)
+        if (randomElement == 0)
+            Instantiate(FireBall, randomPos, Quaternion.identity);
+        else if (randomElement == 1)
+            Instantiate(WaterBall, randomPos, Quaternion.identity);
+        else if (randomElement == 2)
+            Instantiate(WindBall, randomPos, Quaternion.identity);
+        else if (randomElement == 3)
+            Instantiate(SandBall, randomPos, Quaternion.identity);
+
+        else if (randomElement == 4)
         {
-            case 0: //불속성
-                Instantiate(FireBall, randomPos, Quaternion.identity);
-                return;
-            case 1: //물속성
-                Instantiate(WaterBall, randomPos, Quaternion.identity);
-                return;
-            case 2: //바람속성
-                Instantiate(WindBall, randomPos, Quaternion.identity);
-                return;
-            case 3: //땅속성
-                Instantiate(EarthBall, randomPos, Quaternion.identity);
-                return;
-            case 4: //방해속성
-                Instantiate(NullBall, randomPos, Quaternion.identity);
-                return;
+            if (randomNullElement == 0)
+                Instantiate(NullBall_fire, randomPos, Quaternion.identity);
+            else if (randomNullElement == 1)
+                Instantiate(NullBall_water, randomPos, Quaternion.identity);
+            else if (randomNullElement == 2)
+                Instantiate(NullBall_wind, randomPos, Quaternion.identity);
+            else if (randomNullElement == 3)
+                Instantiate(NullBall_sand, randomPos, Quaternion.identity);
         }
+        return;
     }
 }
