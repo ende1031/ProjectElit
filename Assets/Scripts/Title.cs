@@ -19,6 +19,13 @@ public class Title : MonoBehaviour
         {
             GameStart();
         }
+
+        if (Input.GetKey(KeyCode.Escape)) // PC : ESC버튼, 안드로이드 : Back버튼
+        {
+#if UNITY_ANDROID //안드로이드일 경우
+            Application.Quit();
+#endif
+        }
     }
 
     public void GameStart() //나중에 다른데서 쓸수도 있을 것 같아서 따로 만들어둠.

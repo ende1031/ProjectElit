@@ -13,8 +13,6 @@ public class Animation_Override : MonoBehaviour
     public AnimatorOverrideController Down_Ani;
 
     int Direction = 1;
-    bool isAttack;
-    bool isHit;
 
     private void Start()
     {
@@ -36,9 +34,5 @@ public class Animation_Override : MonoBehaviour
 
         if (Direction == 3)
             GetComponent<Animator>().runtimeAnimatorController = Right_Ani;
-
-
-        Animaitor.SetBool("isAttack", isAttack);
-        Animaitor.SetBool("isHit", isAttack);
     }
 }

@@ -14,7 +14,10 @@ public class SelectStage : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (Input.GetKey(KeyCode.Escape)) // PC : ESC버튼, 안드로이드 : Back버튼
+        {
+            GameManager.instance.FadeAndLoadScene("Title");
+        }
     }
 
     public void goStage(int s)

@@ -301,7 +301,7 @@ public class PlayerController : MonoBehaviour
                     temp.x += 1;
                     break;
             }
-            if (ObjectManager.instance.isPlace(temp, "monster") || ObjectManager.instance.isPlace(temp, "tree") || ObjectManager.instance.isPlace(temp, "tail"))
+            if (ObjectManager.instance.isPlace(temp, "monster") || ObjectManager.instance.isPlace(temp, "tree"))
             {
                 return; //구석에 박혀서 방향전환하려는 방향에도 벽이 있을 경우 그쪽으론 방향전환 안됨
             }
