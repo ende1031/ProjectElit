@@ -1,9 +1,17 @@
 fileFormatVersion: 2
 guid: 227b78bbd3120d546afaf3f65d14c28d
-timeCreated: 1500269503
+timeCreated: 1500456434
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: "\uBD88\uC911\uAC04_0"
+    21300002: "\uBD88\uC911\uAC04_1"
+    21300004: "\uBD88\uC911\uAC04_4"
+    21300006: "\uBD88\uC911\uAC04_6"
+    21300008: "\uBD88\uC911\uAC04_7"
+    21300010: "\uBD88\uC911\uAC04_9"
+    21300012: "\uBD88\uC911\uAC04_11"
+    21300014: "\uBD88\uC911\uAC04_12"
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -34,7 +42,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -68,7 +76,111 @@ TextureImporter:
     overridden: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: "\uBD88\uC911\uAC04_0"
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 355
+        height: 300
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: "\uBD88\uC911\uAC04_1"
+      rect:
+        serializedVersion: 2
+        x: 371
+        y: 0
+        width: 362
+        height: 300
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: "\uBD88\uC911\uAC04_4"
+      rect:
+        serializedVersion: 2
+        x: 748
+        y: 0
+        width: 263
+        height: 300
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: "\uBD88\uC911\uAC04_6"
+      rect:
+        serializedVersion: 2
+        x: 1116
+        y: 0
+        width: 287
+        height: 300
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: "\uBD88\uC911\uAC04_7"
+      rect:
+        serializedVersion: 2
+        x: 1456
+        y: 0
+        width: 378
+        height: 300
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: "\uBD88\uC911\uAC04_9"
+      rect:
+        serializedVersion: 2
+        x: 1853
+        y: 0
+        width: 362
+        height: 300
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: "\uBD88\uC911\uAC04_11"
+      rect:
+        serializedVersion: 2
+        x: 2224
+        y: 0
+        width: 280
+        height: 300
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: "\uBD88\uC911\uAC04_12"
+      rect:
+        serializedVersion: 2
+        x: 2591
+        y: 0
+        width: 259
+        height: 300
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
     outline: []
   spritePackingTag: 
   userData: 
