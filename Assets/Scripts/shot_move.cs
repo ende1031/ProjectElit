@@ -8,6 +8,7 @@ public class shot_move : MonoBehaviour {
     private Quaternion angle = Quaternion.identity;
     public float moveSpeed = 10.0f;
     public int dir = 0;
+    public int Element; // 0:불, 1:물, 2:바람, 3:땅, 4:불물?
     PlayerController move;
 
 
@@ -60,6 +61,33 @@ public class shot_move : MonoBehaviour {
 
     // Update is called once per frame
     void Update ()
+    {
+        switch(Element)
+        {
+            case 3:
+                shield();
+                break;
+            default:
+                Fireball();
+                break;
+        }
+
+        
+    }
+
+    void shield()
+    {
+        if(GameObject.Find("Player").GetComponent<PlayerController>().GetImmortal())
+        {
+            transform.position = GameObject.Find("Player").transform.position;
+        }
+        else
+        {
+            Destroy();
+        }
+    }
+
+    void Fireball()
     {
         if (!isHit)
         {

@@ -13,6 +13,9 @@ public class PlayerController : MonoBehaviour
     bool hit_ing = false;
     float hit_delay = 0;
 
+    bool immortal; //무적
+    float immortal_timer;
+
     public class Coordset
     {
         public Coordset(Vector2 o, Vector2 n)
@@ -92,6 +95,8 @@ public class PlayerController : MonoBehaviour
         NullElementNum = 0;
 
         GameOver = false;
+        immortal = false;
+        immortal_timer = 0;
     }
 
     // Update is called once per frame
@@ -99,6 +104,17 @@ public class PlayerController : MonoBehaviour
     {
         if (!GameOver)
         {
+            //일정시간 지나면 무적 풀림
+            if (immortal)
+            {
+                immortal_timer += Time.deltaTime;
+                if(immortal_timer > 3.0f)
+                {
+                    immortal_timer = 0;
+                    immortal = false;
+                }
+            }
+
             //맞았을 때 매 프레임 실행
             if (isHit)
                 Hit();
@@ -171,13 +187,16 @@ public class PlayerController : MonoBehaviour
             animaitor.SetBool("Hitted", true);
             hit_ing = true;
 
-            if (GetTailLength() == 0 || GetTailLength() == NullElementNum)
+            if (!immortal)
             {
-                Die();
-            }
-            else if (GetTailLength() > 0)
-            {
-                RemoveDrop();
+                if (GetTailLength() == 0 || GetTailLength() == NullElementNum)
+                {
+                    Die();
+                }
+                else if (GetTailLength() > 0)
+                {
+                    RemoveDrop();
+                }
             }
             hitTimer = 0;
         }
@@ -342,7 +361,6 @@ public class PlayerController : MonoBehaviour
     //공격. 버튼UI에서 이 함수 실행
     public void Attack()
     {
-  
         if (GetElement(0) == 0)
         {
             attack_ing = true;
@@ -370,6 +388,7 @@ public class PlayerController : MonoBehaviour
             animaitor.SetInteger("Attack_element", 3);
             Instantiate(Sandshot, new Vector3(transform.position.x, transform.position.y + 0.5f, 0), transform.rotation);
             GameManager.instance.PlaySE("Sand");
+            immortal = true;
         }
         RemoveDrop();
     }
@@ -718,5 +737,10 @@ public class PlayerController : MonoBehaviour
     public bool GetGameOver()
     {
         return GameOver;
+    }
+
+    public bool GetImmortal()
+    {
+        return immortal;
     }
 }
