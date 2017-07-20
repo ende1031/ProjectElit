@@ -504,9 +504,11 @@ public class PlayerController : MonoBehaviour
         {
             attack_ing = true;
             animaitor.SetInteger("Attack_element", 3);
-            Instantiate(Sandshot, new Vector3(transform.position.x, transform.position.y, 0), transform.rotation);
-            GameManager.instance.PlaySE("Sand");
+            if(immortal_timer == 0)
+                Instantiate(Sandshot, new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity);
             immortal = true;
+            immortal_timer = 0;
+            GameManager.instance.PlaySE("Sand");
         }
         RemoveDrop();
     }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ElementalMagic : MonoBehaviour
 {
-    public float moveSpeed = 10.0f;
+    public float moveSpeed = 7.0f;
     public int Element; // 0:불, 1:물, 2:바람, 3:땅, 4이후:속성조합마법(추후 지정)
     public GameObject ExplosionEff;
 
@@ -14,7 +14,7 @@ public class ElementalMagic : MonoBehaviour
     Vector3 MoveVec; //방향 벡터
     Vector2 Coordinate; //좌표
     float GridSize;
-    float aliveTime;
+    float aliveTime = 0;
 
     GameObject RenderObject_start;
     GameObject RenderObject_shooting;
@@ -24,70 +24,53 @@ public class ElementalMagic : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        RenderObject_start = transform.Find("start").gameObject;
-        RenderObject_shooting = transform.Find("shooting").gameObject;
         move = GameObject.Find("Player").GetComponent<PlayerController>();
         GridSize = move.GridSize;
-        aliveTime = 0;
         dir = move.getDirection();
 
-        Vector3 tempPosition;
+        //Vector3 tempPosition;
 
-        if(Element == 0)
+        if (Element == 0 || Element == 1 || Element == 2) //발사체
         {
-            effect_offset.x = 0.72f;
-            effect_offset.y = 0.03f;
+            if (Element == 0)
+                effect_offset.Set(0.72f, 0.03f);
+            else if (Element == 1)
+                effect_offset.Set(0.16f, 0);
+            else if (Element == 2)
+                effect_offset.Set(0.18f, 0);
+
+            RenderObject_start = transform.Find("start").gameObject;
+            RenderObject_shooting = transform.Find("shooting").gameObject;
+            if (dir == 0) // 0 : 위, 1 : 아래, 2 : : 왼쪽, 3 : 오른쪽
+            {
+                MoveVec = new Vector3(0, 1, 0);
+                RenderObject_start.transform.Rotate(0, 0, -90);
+                RenderObject_shooting.transform.Rotate(0, 0, -90);
+                RenderObject_shooting.transform.position = new Vector3(RenderObject_start.transform.position.x + effect_offset.y, RenderObject_start.transform.position.y - effect_offset.x, RenderObject_start.transform.position.z);
+            }
+            else if (dir == 1)
+            {
+                MoveVec = new Vector3(0, -1, 0);
+                RenderObject_start.transform.Rotate(0, 0, 90);
+                RenderObject_shooting.transform.Rotate(0, 0, 90);
+                RenderObject_shooting.transform.position = new Vector3(RenderObject_start.transform.position.x - effect_offset.y, RenderObject_start.transform.position.y + effect_offset.x, RenderObject_start.transform.position.z);
+            }
+            else if (dir == 2)
+            {
+                MoveVec = new Vector3(-1, 0, 0);
+                RenderObject_shooting.transform.position = new Vector3(RenderObject_start.transform.position.x + effect_offset.x, RenderObject_start.transform.position.y + effect_offset.y, RenderObject_start.transform.position.z);
+            }
+            else if (dir == 3)
+            {
+                MoveVec = new Vector3(1, 0, 0);
+                RenderObject_start.transform.Rotate(0, 0, 180);
+                RenderObject_shooting.transform.Rotate(0, 0, 180);
+                RenderObject_shooting.transform.position = new Vector3(RenderObject_start.transform.position.x - effect_offset.x, RenderObject_start.transform.position.y - effect_offset.y, RenderObject_start.transform.position.z);
+            }
         }
-        else if (Element == 1)
+        else if(Element == 3) //실드
         {
-            effect_offset.x = 0.16f;
-            effect_offset.y = 0;
-        }
-        else if (Element == 2)
-        {
-            effect_offset.x = 0.18f;
-            effect_offset.y = 0;
-        }
 
-
-        switch (Element)
-        {
-            case 3:
-                //실드 애니메이션 여기에
-                break;
-
-            default:
-                if (dir == 0) // 0 : 위, 1 : 아래, 2 : : 왼쪽, 3 : 오른쪽
-                {
-                    MoveVec = new Vector3(0, 1, 0);
-                    RenderObject_start.transform.Rotate(0, 0, -90);
-                    RenderObject_shooting.transform.Rotate(0, 0, -90);
-                    tempPosition = new Vector3(RenderObject_start.transform.position.x + effect_offset.y, RenderObject_start.transform.position.y - effect_offset.x, RenderObject_start.transform.position.z);
-                    RenderObject_shooting.transform.position = tempPosition;
-                }
-                else if (dir == 1)
-                {
-                    MoveVec = new Vector3(0, -1, 0);
-                    RenderObject_start.transform.Rotate(0, 0, 90);
-                    RenderObject_shooting.transform.Rotate(0, 0, 90);
-                    tempPosition = new Vector3(RenderObject_start.transform.position.x - effect_offset.y, RenderObject_start.transform.position.y + effect_offset.x, RenderObject_start.transform.position.z);
-                    RenderObject_shooting.transform.position = tempPosition;
-                }
-                else if (dir == 2)
-                {
-                    MoveVec = new Vector3(-1, 0, 0);
-                    tempPosition = new Vector3(RenderObject_start.transform.position.x + effect_offset.x, RenderObject_start.transform.position.y + effect_offset.y, RenderObject_start.transform.position.z);
-                    RenderObject_shooting.transform.position = tempPosition;
-                }
-                else if (dir == 3)
-                {
-                    MoveVec = new Vector3(1, 0, 0);
-                    RenderObject_start.transform.Rotate(0, 0, 180);
-                    RenderObject_shooting.transform.Rotate(0, 0, 180);
-                    tempPosition = new Vector3(RenderObject_start.transform.position.x - effect_offset.x, RenderObject_start.transform.position.y - effect_offset.y, RenderObject_start.transform.position.z);
-                    RenderObject_shooting.transform.position = tempPosition;
-                }
-                break;
         }
     }
 
@@ -103,14 +86,13 @@ public class ElementalMagic : MonoBehaviour
     {
         SetCoordinate();
 
-        switch (Element)
+        if (Element == 0 || Element == 1 || Element == 2) //발사체
         {
-            case 3:
-                shield();
-                break;
-            default:
-                Fireball();
-                break;
+            Fireball();
+        }
+        else if (Element == 3) //실드
+        {
+            shield();
         }
     }
 
