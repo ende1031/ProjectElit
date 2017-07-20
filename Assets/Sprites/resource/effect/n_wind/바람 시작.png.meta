@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 62c6050a761aa1f40bc00dbf5a299724
-timeCreated: 1500455647
+timeCreated: 1500534359
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -79,10 +79,10 @@ TextureImporter:
       name: "\uBC14\uB78C \uC2DC\uC791_0"
       rect:
         serializedVersion: 2
-        x: 124
-        y: 127
-        width: 52
-        height: 46
+        x: 0
+        y: 0
+        width: 300
+        height: 300
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -92,10 +92,10 @@ TextureImporter:
       name: "\uBC14\uB78C \uC2DC\uC791_1"
       rect:
         serializedVersion: 2
-        x: 415
-        y: 118
-        width: 67
-        height: 67
+        x: 300
+        y: 0
+        width: 300
+        height: 300
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -105,10 +105,10 @@ TextureImporter:
       name: "\uBC14\uB78C \uC2DC\uC791_2"
       rect:
         serializedVersion: 2
-        x: 584
-        y: 132
-        width: 4
-        height: 8
+        x: 600
+        y: 0
+        width: 300
+        height: 300
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -118,10 +118,10 @@ TextureImporter:
       name: "\uBC14\uB78C \uC2DC\uC791_3"
       rect:
         serializedVersion: 2
-        x: 698
-        y: 100
-        width: 102
-        height: 104
+        x: 900
+        y: 0
+        width: 300
+        height: 300
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -131,23 +131,10 @@ TextureImporter:
       name: "\uBC14\uB78C \uC2DC\uC791_4"
       rect:
         serializedVersion: 2
-        x: 980
-        y: 99
-        width: 138
-        height: 121
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: "\uBC14\uB78C \uC2DC\uC791_5"
-      rect:
-        serializedVersion: 2
-        x: 1269
-        y: 96
-        width: 154
-        height: 138
+        x: 1200
+        y: 0
+        width: 300
+        height: 300
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}

@@ -82,8 +82,10 @@
     <Compile Include="Assets\Scripts\AutoPositionZ.cs" />
     <Compile Include="Assets\Scripts\CamaraController.cs" />
     <Compile Include="Assets\Scripts\CoordinateCollider.cs" />
+    <Compile Include="Assets\Scripts\EffectEvent.cs" />
     <Compile Include="Assets\Scripts\ElementDrop.cs" />
     <Compile Include="Assets\Scripts\ElementSpawn.cs" />
+    <Compile Include="Assets\Scripts\ElementalMagic.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\ObjectManager.cs" />
     <Compile Include="Assets\Scripts\Pause.cs" />

@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: dc474cabf2f946e4e83111cbc9b2d31e
-timeCreated: 1500456316
+timeCreated: 1500526343
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -12,6 +12,7 @@ TextureImporter:
     21300010: "\uBD88\uB05D_6"
     21300012: "\uBD88\uB05D_7"
     21300014: "\uBD88\uB05D_8"
+    21300016: "\uBD88\uB05D_4"
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -81,10 +82,10 @@ TextureImporter:
       name: "\uBD88\uB05D_0"
       rect:
         serializedVersion: 2
-        x: 23
-        y: 27
-        width: 256
-        height: 256
+        x: 0
+        y: 0
+        width: 300
+        height: 300
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -94,10 +95,10 @@ TextureImporter:
       name: "\uBD88\uB05D_1"
       rect:
         serializedVersion: 2
-        x: 316
-        y: 21
-        width: 256
-        height: 256
+        x: 300
+        y: 0
+        width: 300
+        height: 300
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -107,10 +108,10 @@ TextureImporter:
       name: "\uBD88\uB05D_2"
       rect:
         serializedVersion: 2
-        x: 613
-        y: 28
-        width: 256
-        height: 256
+        x: 600
+        y: 0
+        width: 300
+        height: 300
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -120,10 +121,23 @@ TextureImporter:
       name: "\uBD88\uB05D_3"
       rect:
         serializedVersion: 2
-        x: 914
-        y: 38
-        width: 256
-        height: 256
+        x: 900
+        y: 0
+        width: 300
+        height: 300
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: "\uBD88\uB05D_4"
+      rect:
+        serializedVersion: 2
+        x: 1200
+        y: 0
+        width: 300
+        height: 300
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -133,10 +147,10 @@ TextureImporter:
       name: "\uBD88\uB05D_5"
       rect:
         serializedVersion: 2
-        x: 1228
-        y: 36
-        width: 256
-        height: 256
+        x: 1500
+        y: 0
+        width: 300
+        height: 300
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -146,10 +160,10 @@ TextureImporter:
       name: "\uBD88\uB05D_6"
       rect:
         serializedVersion: 2
-        x: 1513
-        y: 30
-        width: 256
-        height: 256
+        x: 1800
+        y: 0
+        width: 300
+        height: 300
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -159,23 +173,10 @@ TextureImporter:
       name: "\uBD88\uB05D_7"
       rect:
         serializedVersion: 2
-        x: 1831
-        y: 40
-        width: 256
-        height: 256
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: "\uBD88\uB05D_8"
-      rect:
-        serializedVersion: 2
-        x: 2116
-        y: 32
-        width: 256
-        height: 256
+        x: 2100
+        y: 0
+        width: 300
+        height: 300
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
