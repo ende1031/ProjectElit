@@ -19,7 +19,7 @@ public class ElementSpawn : MonoBehaviour
     void Start()
     {
         ObjectManager.instance.FieldElementNum = 0;
-        InvokeRepeating("SpawnElement", 3, 1);
+        InvokeRepeating("SpawnElement", 3, 1);//게임 시작 3초뒤에 1초 마다 반복
     }
 
     // Update is called once per frame
@@ -31,10 +31,12 @@ public class ElementSpawn : MonoBehaviour
     void SpawnElement()
     {
         if (ObjectManager.instance.FieldElementNum > 5) return;
-        int tryNum = 0;
+        int tryNum = 0;//한번에 SpawnElement가 실행된 횟수.
+
         Vector2 randomPos = new Vector3(Random.Range(-14, 15), Random.Range(-8, 9));
         int randomElement = (int)Random.Range(0, 5);
         int randomNullElement = (int)Random.Range(0, 5);
+
         while (ObjectManager.instance.isPlace(randomPos, "tree") || ObjectManager.instance.isPlace(randomPos, "monster")
             || ObjectManager.instance.isPlace(randomPos, "tail") || ObjectManager.instance.isPlace(randomPos, "null_ball")
             || ObjectManager.instance.isPlace(randomPos, "fire_ball") || ObjectManager.instance.isPlace(randomPos, "water_ball")

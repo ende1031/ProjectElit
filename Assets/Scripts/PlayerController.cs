@@ -73,6 +73,9 @@ public class PlayerController : MonoBehaviour
 
     bool GameOver;
 
+    float chargeTimer;
+    int Chargelist;
+    
     // Use this for initialization
     void Start()
     {
@@ -97,6 +100,8 @@ public class PlayerController : MonoBehaviour
         GameOver = false;
         immortal = false;
         immortal_timer = 0;
+        Chargelist = 0;
+        chargeTimer = 0;
     }
 
     // Update is called once per frame
@@ -144,6 +149,31 @@ public class PlayerController : MonoBehaviour
                 {
                     NullElementNum++;
                 }
+            }
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                Chargelist = 0;
+                for (int i = 0; i < 3; i++)
+                {
+                    if (GetTailLength() - NullElementNum < i + 1) return; // 꼬리 길이가 3개보다 적으면 패스
+                    //불 = 1, 물 = 10, 바람 = 100, 땅 = 1000, 방해 = 10000
+                    if (GetElement(i) == 0)
+                        Chargelist += 1;
+                    else if (GetElement(i) == 1)
+                        Chargelist += 10;
+                    else if (GetElement(i) == 2)
+                        Chargelist += 100;
+                    else if (GetElement(i) == 3)
+                        Chargelist += 1000;
+                    else if (GetElement(i) == 4)
+                        Chargelist += 10000;
+                }
+            }
+
+            if (Input.GetKey(KeyCode.Space))
+            {
+                chargeTimer += Time.deltaTime;
             }
 
             if (Input.GetKeyUp(KeyCode.Space)) // 불 바람 물 땅 마법 사용
@@ -361,6 +391,94 @@ public class PlayerController : MonoBehaviour
     //공격. 버튼UI에서 이 함수 실행
     public void Attack()
     {
+        /*if (chargeTimer > 2 && Chargelist < 20000)
+        {
+
+        }
+        else if (chargeTimer > 1 && Chargelist < 10000)
+        {
+            if (Chargelist == 2)//불+불
+            {
+                Debug.Log(Chargelist);
+                RemoveDrop();
+                RemoveDrop();
+                Chargelist = 0;
+                chargeTimer = 0;
+                return;
+            }
+            else if (Chargelist == 20)//물+물
+            {
+                Debug.Log(Chargelist);
+                RemoveDrop();
+                RemoveDrop();
+                Chargelist = 0;
+                chargeTimer = 0;
+                return;
+            }
+            else if (Chargelist == 200)//바람+바람
+            {
+                Debug.Log(Chargelist);
+                RemoveDrop();
+                RemoveDrop();
+                Chargelist = 0;
+                chargeTimer = 0;
+                return;
+            }
+            else if (Chargelist == 2000)//흙+흙
+            {
+                Debug.Log(Chargelist);
+                RemoveDrop();
+                RemoveDrop();
+                Chargelist = 0;
+                chargeTimer = 0;
+                return;
+            }
+            else if (Chargelist == 101)//불+바람
+            {
+                Debug.Log(Chargelist);
+                RemoveDrop();
+                RemoveDrop();
+                Chargelist = 0;
+                chargeTimer = 0;
+                return;
+            }
+            else if (Chargelist == 1001)//불+흙
+            {
+                Debug.Log(Chargelist);
+                RemoveDrop();
+                RemoveDrop();
+                Chargelist = 0;
+                chargeTimer = 0;
+                return;
+            }
+            else if (Chargelist == 110)//물+바람
+            {
+                Debug.Log(Chargelist);
+                RemoveDrop();
+                RemoveDrop();
+                Chargelist = 0;
+                chargeTimer = 0;
+                return;
+            }
+            else if (Chargelist == 1010)//물+흙
+            {
+                Debug.Log(Chargelist);
+                RemoveDrop();
+                RemoveDrop();
+                Chargelist = 0;
+                chargeTimer = 0;
+                return;
+            }
+            else if (Chargelist == 1100)//물+흙
+            {
+                Debug.Log(Chargelist);
+                RemoveDrop();
+                RemoveDrop();
+                Chargelist = 0;
+                chargeTimer = 0;
+                return;
+            }
+        }*/
         if (GetElement(0) == 0)
         {
             attack_ing = true;
