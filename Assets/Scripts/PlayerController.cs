@@ -74,8 +74,8 @@ public class PlayerController : MonoBehaviour
     bool GameOver;
 
     float chargeTimer;
-    int Chargelist;
-    
+    int[] Chargelist = new int[5];
+
     // Use this for initialization
     void Start()
     {
@@ -100,7 +100,6 @@ public class PlayerController : MonoBehaviour
         GameOver = false;
         immortal = false;
         immortal_timer = 0;
-        Chargelist = 0;
         chargeTimer = 0;
     }
 
@@ -112,77 +111,44 @@ public class PlayerController : MonoBehaviour
             //일정시간 지나면 무적 풀림
             if (immortal)
             {
-                immortal_timer += Time.deltaTime;
-                if(immortal_timer > 3.0f)
+                immortal_timer -= Time.deltaTime;
+                if (immortal_timer < 0)
                 {
-                    immortal_timer = 0;
                     immortal = false;
+                    immortal_timer = 0;
                 }
             }
 
             //맞았을 때 매 프레임 실행
-            if (isHit)
-                Hit();
-            else
-                hitTimer = 0;
+            if (isHit) Hit();
+            else hitTimer = 0;
 
+            //충돌
             Collision_ball();
             Collision_mob();
             Collision_tail();
 
-            if (!isHit)
-                Move();
-
+            //이동
+            if (!isHit) Move();
             MoveTails();
-
-            if (canCangeDir)
-            {
-                InputKey();
-            }
-
+            if (canCangeDir) InputKey();
             SetCoordinate();
 
+            //공격
+            Attack();
+
             //맨 앞의 방해구슬 개수 체크
-            if (GetTailLength() > 0 && GetTailLength() != NullElementNum) //꼬리가 0개보다 많을 때만 검사
+            if (GetTailLength() > 0 && GetTailLength() != NullElementNum) //꼬리가 0개보다 많을 때,맨 앞 방해구슬보다 많을 때 만 검사
             {
-                if (Droplist[NullElementNum].GetComponent<ElementDrop>().Element == 4)
+                while (Droplist[NullElementNum].GetComponent<ElementDrop>().Element == 4)
                 {
                     NullElementNum++;
                 }
             }
-
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                Chargelist = 0;
-                for (int i = 0; i < 3; i++)
-                {
-                    if (GetTailLength() - NullElementNum < i + 1) return; // 꼬리 길이가 3개보다 적으면 패스
-                    //불 = 1, 물 = 10, 바람 = 100, 땅 = 1000, 방해 = 10000
-                    if (GetElement(i) == 0)
-                        Chargelist += 1;
-                    else if (GetElement(i) == 1)
-                        Chargelist += 10;
-                    else if (GetElement(i) == 2)
-                        Chargelist += 100;
-                    else if (GetElement(i) == 3)
-                        Chargelist += 1000;
-                    else if (GetElement(i) == 4)
-                        Chargelist += 10000;
-                }
-            }
-
-            if (Input.GetKey(KeyCode.Space))
-            {
-                chargeTimer += Time.deltaTime;
-            }
-
-            if (Input.GetKeyUp(KeyCode.Space)) // 불 바람 물 땅 마법 사용
-            {
-                Attack();
-            }
         }
 
         // 공격 애니메이션 -> 기본 애니메이션으로 돌아오기 위한 변수
+
         if (attack_ing)
         {
             attack_delay += Time.deltaTime;
@@ -230,7 +196,7 @@ public class PlayerController : MonoBehaviour
             }
             hitTimer = 0;
         }
-       
+
     }
 
     // 아이템과 같은 좌표에 있을 때
@@ -320,7 +286,7 @@ public class PlayerController : MonoBehaviour
 
             for (int i = 0; i < Droplist.Count; i++)
             {
-                if(i >= temp)
+                if (i >= temp)
                 {
                     RemoveDropAt(temp);
                 }
@@ -391,126 +357,177 @@ public class PlayerController : MonoBehaviour
     //공격. 버튼UI에서 이 함수 실행
     public void Attack()
     {
-        /*if (chargeTimer > 2 && Chargelist < 20000)
+        if (Input.GetKeyDown(KeyCode.Space))
         {
+            for (int i = 0; i < 3; i++)
+            {
+                if (GetTailLength() - NullElementNum < i + 1) return; // 꼬리 길이가 3개보다 적으면 패스
+
+                //불 = 0, 물 = 1, 바람 = 2, 땅 = 3
+                if (GetElement(i) == 0)
+                {
+                    if (Chargelist[1] > 0) return;
+                    Chargelist[0] += 1;
+                }
+
+                else if (GetElement(i) == 1)
+                {
+                    if (Chargelist[0] > 0) return;
+                    Chargelist[1] += 1;
+                }
+
+                else if (GetElement(i) == 2)
+                {
+                    Chargelist[2] += 1;
+                }
+                else if (GetElement(i) == 3)
+                {
+                    Chargelist[3] += 1;
+                }
+                else if (GetElement(i) == 4)
+                {
+                    return;
+                }
+
+                // for (int j = 0; j < 5; j++) Debug.Log(Chargelist[j]);
+            }
+        }
+
+        if (Input.GetKey(KeyCode.Space))
+        {
+            chargeTimer += Time.deltaTime;
+            if (isHit) return;
+        }
+
+        if (Input.GetKeyUp(KeyCode.Space)) // 불 바람 물 땅 마법 사용
+        {
+            /*
+            bool attack_poss = false;
+            if (chargeTimer > 2)
+            {
+                if (Chargelist[0] == 3)
+                {
+                }
+                else if (Chargelist[1] == 3)
+                {
+                }
+                else if (Chargelist[2] == 3)
+                {
+                }
+                else if (Chargelist[3] == 3)
+                {
+                }
+                else if (Chargelist[0] == 1 && Chargelist[2] == 2 || Chargelist[0] == 2 && Chargelist[2] == 1)
+                {
+                }
+                else if (Chargelist[0] == 1 && Chargelist[3] == 2 || Chargelist[0] == 2 && Chargelist[3] == 1)
+                {
+                }
+                else if (Chargelist[1] == 1 && Chargelist[2] == 2 || Chargelist[1] == 2 && Chargelist[2] == 1)
+                {
+                }
+                else if (Chargelist[1] == 1 && Chargelist[3] == 2 || Chargelist[1] == 2 && Chargelist[3] == 1)
+                {
+                }
+                else if (Chargelist[2] == 1 && Chargelist[3] == 2 || Chargelist[2] == 2 && Chargelist[3] == 1)
+                {
+                }
+                else if (Chargelist[0] == 1 && Chargelist[2] == 1 && Chargelist[3] == 1 )
+                {
+                }
+                else if (Chargelist[1] == 1 && Chargelist[2] == 1 && Chargelist[3] == 1)
+                {
+                }
+
+            }
+            if (chargeTimer > 1)
+            {
+                if (Chargelist[0] == 2)//불+불
+                {
+                    attack_poss = true;
+                }
+                else if (Chargelist[1] == 2)//물+물
+                {
+                    attack_poss = true;
+                }
+                else if (Chargelist[2] == 2)//바람+바람
+                {
+                    attack_poss = true;
+                }
+                else if (Chargelist[3] == 2)//흙+흙
+                {
+                    attack_poss = true;
+                }
+                else if (Chargelist[0] == 1 && Chargelist[2] == 1)//불+바람
+                {
+                    attack_poss = true;
+                }
+                else if (Chargelist[0] == 1 && Chargelist[3] == 1)//불+흙
+                {
+                    attack_poss = true;
+                }
+                else if (Chargelist[1] == 1 && Chargelist[2] == 1)//물+바람
+                {
+                    attack_poss = true;
+                }
+                else if (Chargelist[1] == 1 && Chargelist[3] == 1)//물+흙
+                {
+                    attack_poss = true;
+                }
+                else if (Chargelist[2] == 1 && Chargelist[3] == 1)//바람+흙
+                {
+                    attack_poss = true;
+                }
+
+                if (attack_poss)
+                {
+                    RemoveDrop();
+                    RemoveDrop();
+                    chargeTimer = 0;
+                    for (int j = 0; j < 5; j++)
+                        Chargelist[j] = 0;
+                    attack_poss = false;
+                    return;
+                }
+            }
+            */
+            if (GetElement(0) == 0)
+            {
+                attack_ing = true;
+                animaitor.SetInteger("Attack_element", 0);
+                Instantiate(Fireshot, new Vector3(transform.position.x, transform.position.y, 0), transform.rotation);
+                GameManager.instance.PlaySE("Fire");
+            }
+            else if (GetElement(0) == 1)
+            {
+                attack_ing = true;
+                animaitor.SetInteger("Attack_element", 1);
+                Instantiate(Watershot, new Vector3(transform.position.x, transform.position.y, 0), transform.rotation);
+                GameManager.instance.PlaySE("Water");
+            }
+            else if (GetElement(0) == 2)
+            {
+                attack_ing = true;
+                animaitor.SetInteger("Attack_element", 2);
+                Instantiate(Windshot, new Vector3(transform.position.x, transform.position.y, 0), transform.rotation);
+                GameManager.instance.PlaySE("Wind");
+            }
+            else if (GetElement(0) == 3)
+            {
+                attack_ing = true;
+                animaitor.SetInteger("Attack_element", 3);
+                if (immortal_timer == 0)
+                    Instantiate(Sandshot, new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity);
+                immortal_timer = 3;
+                immortal = true;
+                GameManager.instance.PlaySE("Sand");
+            }
+            RemoveDrop();
+            chargeTimer = 0;
+            for (int j = 0; j < 5; j++)
+                Chargelist[j] = 0;
 
         }
-        else if (chargeTimer > 1 && Chargelist < 10000)
-        {
-            if (Chargelist == 2)//불+불
-            {
-                Debug.Log(Chargelist);
-                RemoveDrop();
-                RemoveDrop();
-                Chargelist = 0;
-                chargeTimer = 0;
-                return;
-            }
-            else if (Chargelist == 20)//물+물
-            {
-                Debug.Log(Chargelist);
-                RemoveDrop();
-                RemoveDrop();
-                Chargelist = 0;
-                chargeTimer = 0;
-                return;
-            }
-            else if (Chargelist == 200)//바람+바람
-            {
-                Debug.Log(Chargelist);
-                RemoveDrop();
-                RemoveDrop();
-                Chargelist = 0;
-                chargeTimer = 0;
-                return;
-            }
-            else if (Chargelist == 2000)//흙+흙
-            {
-                Debug.Log(Chargelist);
-                RemoveDrop();
-                RemoveDrop();
-                Chargelist = 0;
-                chargeTimer = 0;
-                return;
-            }
-            else if (Chargelist == 101)//불+바람
-            {
-                Debug.Log(Chargelist);
-                RemoveDrop();
-                RemoveDrop();
-                Chargelist = 0;
-                chargeTimer = 0;
-                return;
-            }
-            else if (Chargelist == 1001)//불+흙
-            {
-                Debug.Log(Chargelist);
-                RemoveDrop();
-                RemoveDrop();
-                Chargelist = 0;
-                chargeTimer = 0;
-                return;
-            }
-            else if (Chargelist == 110)//물+바람
-            {
-                Debug.Log(Chargelist);
-                RemoveDrop();
-                RemoveDrop();
-                Chargelist = 0;
-                chargeTimer = 0;
-                return;
-            }
-            else if (Chargelist == 1010)//물+흙
-            {
-                Debug.Log(Chargelist);
-                RemoveDrop();
-                RemoveDrop();
-                Chargelist = 0;
-                chargeTimer = 0;
-                return;
-            }
-            else if (Chargelist == 1100)//물+흙
-            {
-                Debug.Log(Chargelist);
-                RemoveDrop();
-                RemoveDrop();
-                Chargelist = 0;
-                chargeTimer = 0;
-                return;
-            }
-        }*/
-        if (GetElement(0) == 0)
-        {
-            attack_ing = true;
-            animaitor.SetInteger("Attack_element", 0);
-            Instantiate(Fireshot, new Vector3(transform.position.x, transform.position.y, 0), transform.rotation);
-            GameManager.instance.PlaySE("Fire");
-        }
-        else if (GetElement(0) == 1)
-        {
-            attack_ing = true;
-            animaitor.SetInteger("Attack_element", 1);
-            Instantiate(Watershot, new Vector3(transform.position.x, transform.position.y, 0), transform.rotation);
-            GameManager.instance.PlaySE("Water");
-        }
-        else if (GetElement(0) == 2)
-        {
-            attack_ing = true;
-            animaitor.SetInteger("Attack_element", 2);
-            Instantiate(Windshot, new Vector3(transform.position.x, transform.position.y, 0), transform.rotation);
-            GameManager.instance.PlaySE("Wind");
-        }
-        else if (GetElement(0) == 3)
-        {
-            attack_ing = true;
-            animaitor.SetInteger("Attack_element", 3);
-            if(immortal_timer == 0)
-                Instantiate(Sandshot, new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity);
-            immortal = true;
-            immortal_timer = 0;
-            GameManager.instance.PlaySE("Sand");
-        }
-        RemoveDrop();
     }
 
     //나중에 터치&드래그로 바꾸기
@@ -859,6 +876,7 @@ public class PlayerController : MonoBehaviour
         return GameOver;
     }
 
+    //무적 상태 리턴
     public bool GetImmortal()
     {
         return immortal;

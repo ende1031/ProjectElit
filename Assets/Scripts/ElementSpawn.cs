@@ -15,6 +15,7 @@ public class ElementSpawn : MonoBehaviour
     public GameObject NullBall_wind;
     public GameObject NullBall_sand;
 
+    public int elemntLimit;
     // Use this for initialization
     void Start()
     {
@@ -30,7 +31,7 @@ public class ElementSpawn : MonoBehaviour
 
     void SpawnElement()
     {
-        if (ObjectManager.instance.FieldElementNum > 5) return;
+        if (ObjectManager.instance.FieldElementNum > elemntLimit) return;
         int tryNum = 0;//한번에 SpawnElement가 실행된 횟수.
 
         Vector2 randomPos = new Vector3(Random.Range(-14, 15), Random.Range(-8, 9));
