@@ -135,7 +135,50 @@ public class PlayerController : MonoBehaviour
             SetCoordinate();
 
             //공격
-            Attack();
+            if (Input.GetKeyUp(KeyCode.Space)) Attack();
+
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    if (GetTailLength() - NullElementNum < i + 1) break; // 꼬리 길이가 3개보다 적으면 패스
+
+                    //불 = 0, 물 = 1, 바람 = 2, 땅 = 3
+                    if (GetElement(i) == 0)
+                    {
+                        if (Chargelist[1] > 0) break;
+                        Chargelist[0] += 1;
+                    }
+
+                    else if (GetElement(i) == 1)
+                    {
+                        if (Chargelist[0] > 0) break;
+                        Chargelist[1] += 1;
+                    }
+
+                    else if (GetElement(i) == 2)
+                    {
+                        Chargelist[2] += 1;
+                    }
+                    else if (GetElement(i) == 3)
+                    {
+                        Chargelist[3] += 1;
+                    }
+                    else if (GetElement(i) == 4)
+                    {
+                        break;
+                    }
+
+                    // for (int j = 0; j < 5; j++) Debug.Log(Chargelist[j]);
+                }
+            }
+
+            if (Input.GetKey(KeyCode.Space))
+            {
+                chargeTimer += Time.deltaTime;
+                if (isHit) return;
+            }
 
             //맨 앞의 방해구슬 개수 체크
             if (GetTailLength() > 0 && GetTailLength() != NullElementNum) //꼬리가 0개보다 많을 때,맨 앞 방해구슬보다 많을 때 만 검사
@@ -357,50 +400,9 @@ public class PlayerController : MonoBehaviour
     //공격. 버튼UI에서 이 함수 실행
     public void Attack()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            for (int i = 0; i < 3; i++)
-            {
-                if (GetTailLength() - NullElementNum < i + 1) return; // 꼬리 길이가 3개보다 적으면 패스
 
-                //불 = 0, 물 = 1, 바람 = 2, 땅 = 3
-                if (GetElement(i) == 0)
-                {
-                    if (Chargelist[1] > 0) return;
-                    Chargelist[0] += 1;
-                }
-
-                else if (GetElement(i) == 1)
-                {
-                    if (Chargelist[0] > 0) return;
-                    Chargelist[1] += 1;
-                }
-
-                else if (GetElement(i) == 2)
-                {
-                    Chargelist[2] += 1;
-                }
-                else if (GetElement(i) == 3)
-                {
-                    Chargelist[3] += 1;
-                }
-                else if (GetElement(i) == 4)
-                {
-                    return;
-                }
-
-                // for (int j = 0; j < 5; j++) Debug.Log(Chargelist[j]);
-            }
-        }
-
-        if (Input.GetKey(KeyCode.Space))
-        {
-            chargeTimer += Time.deltaTime;
-            if (isHit) return;
-        }
-
-        if (Input.GetKeyUp(KeyCode.Space)) // 불 바람 물 땅 마법 사용
-        {
+         // 불 바람 물 땅 마법 사용
+        
             /*
             bool attack_poss = false;
             if (chargeTimer > 2)
@@ -527,7 +529,7 @@ public class PlayerController : MonoBehaviour
             for (int j = 0; j < 5; j++)
                 Chargelist[j] = 0;
 
-        }
+        
     }
 
     //나중에 터치&드래그로 바꾸기
