@@ -137,7 +137,6 @@ public class PlayerController : MonoBehaviour
             //공격
             if (Input.GetKeyUp(KeyCode.Space)) Attack();
 
-
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 for (int i = 0; i < 3; i++)

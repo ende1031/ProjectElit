@@ -50,4 +50,11 @@ public class Pause : MonoBehaviour
         Time.timeScale = 1;
         GameManager.instance.FadeAndLoadScene("Title");
     }
+
+    public void SelectStage()
+    {
+        PauseCanvas.SetActive(false);
+        Time.timeScale = 1;
+        GameManager.instance.FadeAndLoadScene("SelectStage");
+    }
 }
