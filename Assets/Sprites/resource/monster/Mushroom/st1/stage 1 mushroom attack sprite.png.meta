@@ -1,0 +1,272 @@
+fileFormatVersion: 2
+guid: 19daf0beb83c0084da3b0722c3e5a0a0
+timeCreated: 1500877703
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: stage 1 mushroom attack sprite_0
+    21300002: stage 1 mushroom attack sprite_1
+    21300004: stage 1 mushroom attack sprite_2
+    21300006: stage 1 mushroom attack sprite_3
+    21300008: stage 1 mushroom attack sprite_4
+    21300010: stage 1 mushroom attack sprite_5
+    21300012: stage 1 mushroom attack sprite_6
+    21300014: stage 1 mushroom attack sprite_7
+    21300016: stage 1 mushroom attack sprite_8
+    21300018: stage 1 mushroom attack sprite_9
+    21300020: stage 1 mushroom attack sprite_10
+    21300022: stage 1 mushroom attack sprite_11
+    21300024: stage 1 mushroom attack sprite_12
+    21300026: stage 1 mushroom attack sprite_13
+  serializedVersion: 4
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: -1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Standalone
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: stage 1 mushroom attack sprite_0
+      rect:
+        serializedVersion: 2
+        x: 78
+        y: 692
+        width: 598
+        height: 463
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: stage 1 mushroom attack sprite_1
+      rect:
+        serializedVersion: 2
+        x: 776
+        y: 692
+        width: 608
+        height: 470
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: stage 1 mushroom attack sprite_2
+      rect:
+        serializedVersion: 2
+        x: 1500
+        y: 692
+        width: 580
+        height: 506
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: stage 1 mushroom attack sprite_3
+      rect:
+        serializedVersion: 2
+        x: 2135
+        y: 692
+        width: 625
+        height: 486
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: stage 1 mushroom attack sprite_4
+      rect:
+        serializedVersion: 2
+        x: 2815
+        y: 692
+        width: 633
+        height: 472
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: stage 1 mushroom attack sprite_5
+      rect:
+        serializedVersion: 2
+        x: 3547
+        y: 689
+        width: 629
+        height: 484
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: stage 1 mushroom attack sprite_6
+      rect:
+        serializedVersion: 2
+        x: 4277
+        y: 692
+        width: 598
+        height: 463
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: stage 1 mushroom attack sprite_7
+      rect:
+        serializedVersion: 2
+        x: 25
+        y: 0
+        width: 598
+        height: 455
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: stage 1 mushroom attack sprite_8
+      rect:
+        serializedVersion: 2
+        x: 715
+        y: 0
+        width: 609
+        height: 461
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: stage 1 mushroom attack sprite_9
+      rect:
+        serializedVersion: 2
+        x: 1420
+        y: 0
+        width: 580
+        height: 497
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: stage 1 mushroom attack sprite_10
+      rect:
+        serializedVersion: 2
+        x: 2140
+        y: 0
+        width: 625
+        height: 477
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: stage 1 mushroom attack sprite_11
+      rect:
+        serializedVersion: 2
+        x: 2852
+        y: 0
+        width: 635
+        height: 463
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: stage 1 mushroom attack sprite_12
+      rect:
+        serializedVersion: 2
+        x: 3525
+        y: 0
+        width: 628
+        height: 473
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: stage 1 mushroom attack sprite_13
+      rect:
+        serializedVersion: 2
+        x: 4224
+        y: 0
+        width: 598
+        height: 455
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
