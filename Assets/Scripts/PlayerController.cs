@@ -208,7 +208,7 @@ public class PlayerController : MonoBehaviour
             hit_delay += Time.deltaTime;
         }
 
-        if (hit_delay > 0.5f)
+        if (hit_delay > 0.3f)
         {
             animaitor.SetBool("Hitted", false);
             hit_ing = false;
