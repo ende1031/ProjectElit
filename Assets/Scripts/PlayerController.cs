@@ -734,6 +734,7 @@ public class PlayerController : MonoBehaviour
                 DirCoord.x += 1;
             setDirCoord = true;
         }
+
         //다음 그리드까지 이동 후 방향전환
         if (transform.position.y / GridSize < DirCoord.y && Direction == 0)
             transform.Translate(MoveVec * MoveSpeed * Time.deltaTime);
@@ -855,6 +856,8 @@ public class PlayerController : MonoBehaviour
         animaitor.SetBool("Alive", false);
         GameOver = true;
         NormalCanvas.SetActive(false);
+
+        //사망화면 나오는 시간에 딜레이
         GameOverCanvas.SetActive(true);
     }
 
