@@ -81,6 +81,7 @@
     <Compile Include="Assets\Scripts\Animation_Override.cs" />
     <Compile Include="Assets\Scripts\AutoPositionZ.cs" />
     <Compile Include="Assets\Scripts\CamaraController.cs" />
+    <Compile Include="Assets\Scripts\ChargeEffect.cs" />
     <Compile Include="Assets\Scripts\CoordinateCollider.cs" />
     <Compile Include="Assets\Scripts\EffectEvent.cs" />
     <Compile Include="Assets\Scripts\ElementDrop.cs" />
