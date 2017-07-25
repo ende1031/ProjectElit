@@ -57,4 +57,10 @@ public class Pause : MonoBehaviour
         Time.timeScale = 1;
         GameManager.instance.FadeAndLoadScene("SelectStage");
     }
+
+    //스테이지 다시 시작
+    public void RestartStage()
+    {
+        Application.LoadLevel(Application.loadedLevel);
+    }
 }
