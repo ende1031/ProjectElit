@@ -897,6 +897,11 @@ public class PlayerController : MonoBehaviour
         animaitor.SetBool("Alive", false);
         GameOver = true;
         NormalCanvas.SetActive(false);
+        Invoke("DeadScreen", 1.3f);
+    }
+
+    void DeadScreen()
+    {
         GameOverCanvas.SetActive(true);
     }
 
