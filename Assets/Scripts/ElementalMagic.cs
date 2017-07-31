@@ -103,7 +103,7 @@ public class ElementalMagic : MonoBehaviour
 
         if (ObjectManager.instance.isPlace(Coordinate, "tree") || ObjectManager.instance.isPlace(Coordinate, "monster"))
         {
-            //ObjectManager.instance.PlacedObject(Coordinate, "monster").GetComponent<Monster>().Hit();
+            ObjectManager.instance.PlacedObject(Coordinate, "monster").GetComponent<Monster>().Hit(1); //충돌한 몬스터한테 1만큼 피해
             Instantiate(ExplosionEff, new Vector3(transform.position.x, transform.position.y, -1), Quaternion.identity);
             Destroy(this.gameObject);
         }
