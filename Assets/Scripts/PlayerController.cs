@@ -126,7 +126,7 @@ public class PlayerController : MonoBehaviour
             }
 
             //맞았을 때 매 프레임 실행
-            if (isHit) Hit();
+            if (isHit && !immortal) Hit();
             else hitTimer = 0;
 
             //충돌
@@ -257,16 +257,13 @@ public class PlayerController : MonoBehaviour
             animaitor.SetBool("Hitted", true);
             hit_ing = true;
 
-            if (!immortal)
+            if (GetTailLength() == 0 || GetTailLength() == NullElementNum)
             {
-                if (GetTailLength() == 0 || GetTailLength() == NullElementNum)
-                {
-                    Die();
-                }
-                else if (GetTailLength() > 0)
-                {
-                    RemoveDrop();
-                }
+                Die();
+            }
+            else if (GetTailLength() > 0)
+            {
+                RemoveDrop();
             }
             hitTimer = 0;
         }
