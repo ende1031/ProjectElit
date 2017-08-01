@@ -529,7 +529,7 @@ public class PlayerController : MonoBehaviour
             }
         }
         */
-        if (GetElement(0) == 1)
+        if (GetElement(1) == 0)
         {
             attack_ing = true;
             animaitor.SetInteger("Attack_element", 0);
@@ -543,14 +543,14 @@ public class PlayerController : MonoBehaviour
             Instantiate(Watershot, new Vector3(transform.position.x, transform.position.y, 0), transform.rotation);
             GameManager.instance.PlaySE("Water");
         }
-        else if (GetElement(2) == 1)
+        else if (GetElement(1) == 2)
         {
             attack_ing = true;
             animaitor.SetInteger("Attack_element", 2);
             Instantiate(Windshot, new Vector3(transform.position.x, transform.position.y, 0), transform.rotation);
             GameManager.instance.PlaySE("Wind");
         }
-        else if (GetElement(3) == 1)
+        else if (GetElement(1) == 3)
         {
             attack_ing = true;
             animaitor.SetInteger("Attack_element", 3);
