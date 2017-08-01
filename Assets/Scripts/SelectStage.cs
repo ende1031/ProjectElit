@@ -28,10 +28,16 @@ public class SelectStage : MonoBehaviour
                 GameManager.instance.FadeAndLoadScene("Stage1-1");
                 break;
             case 2:
-                GameManager.instance.FadeAndLoadScene("Stage1-1");
+                GameManager.instance.FadeAndLoadScene("Stage1-2");
                 break;
             case 3:
-                GameManager.instance.FadeAndLoadScene("Stage1-1");
+                GameManager.instance.FadeAndLoadScene("Stage1-3");
+                break;
+            case 4:
+                GameManager.instance.FadeAndLoadScene("Stage1-4");
+                break;
+            case 5:
+                GameManager.instance.FadeAndLoadScene("Stage1-5");
                 break;
         }
     }
