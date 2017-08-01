@@ -3,12 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Monster : MonoBehaviour {
-
+    
+    public int StartDirection; //어느 방향으로
+    public int StepNumber; //몇발자국
+    public float MoveSpeed; //얼마나 빨리
     public int MaxHP;
-    int HP;
 
+    int HP;
     Vector2 Size;
     float GridSize;
+    Vector3 MoveVec;
+    bool turnBack = false;
+    int MoveCount = 0;
+    Vector2 oldCoord;
+    float idleTimer = 0;
 
     public GameObject FireBall;
     public GameObject WaterBall;
@@ -21,14 +29,70 @@ public class Monster : MonoBehaviour {
         HP = MaxHP;
         Size = GetComponent<CoordinateCollider>().Size;
         GridSize = GameObject.Find("Player").GetComponent<PlayerController>().GridSize;
+        oldCoord = SetCoordinate();
     }
 	
 	// Update is called once per frame
 	void Update ()
     {
+        Move();
+
         if (HP <= 0)
             Die();
-	}
+    }
+
+    void Move()
+    {
+        if(!turnBack)
+        {
+            if(StartDirection == 0)
+                MoveVec = new Vector3(0, 1, 0);
+            else if (StartDirection == 1)
+                MoveVec = new Vector3(0, -1, 0);
+            else if (StartDirection == 2)
+                MoveVec = new Vector3(-1, 0, 0);
+            else if (StartDirection == 3)
+                MoveVec = new Vector3(1, 0, 0);
+        }
+        else //되돌아올땐 MoveVec가 반대
+        {
+            if (StartDirection == 0)
+                MoveVec = new Vector3(0, -1, 0);
+            else if (StartDirection == 1)
+                MoveVec = new Vector3(0, 1, 0);
+            else if (StartDirection == 2)
+                MoveVec = new Vector3(1, 0, 0);
+            else if (StartDirection == 3)
+                MoveVec = new Vector3(-1, 0, 0);
+        }
+
+        if (idleTimer <= 0) //움직임
+        {
+            transform.Translate(MoveVec * MoveSpeed * Time.deltaTime);
+        }
+        else //대기
+        {
+            idleTimer -= Time.deltaTime;
+        }
+
+        //한칸 이동하면 MoveCount증가
+        if (Mathf.Abs(oldCoord.x - transform.position.x) >= GridSize || Mathf.Abs(oldCoord.y - transform.position.y) >= GridSize)
+        {
+            MoveCount++;
+            oldCoord = SetCoordinate();
+        }
+
+        //StepNumber만큼 이동하면 방향전환
+        if (MoveCount >= StepNumber)
+        {
+            MoveCount = 0;
+            if(turnBack)
+                turnBack = false;
+            else
+                turnBack = true;
+            idleTimer = 1.0f;
+        }
+    }
 
     public void Hit(int damage)
     {
@@ -55,6 +119,7 @@ public class Monster : MonoBehaviour {
             Instantiate(WindBall, temp, Quaternion.identity);
         else if (randomElement == 3)
             Instantiate(SandBall, temp, Quaternion.identity);
+        // 4가 나오면 노드랍
     }
 
     Vector2 SetCoordinate()
