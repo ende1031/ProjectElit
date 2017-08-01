@@ -529,28 +529,28 @@ public class PlayerController : MonoBehaviour
             }
         }
         */
-        if (GetElement(1) == 0)
+        if (GetElement(0) == 0)
         {
             attack_ing = true;
             animaitor.SetInteger("Attack_element", 0);
             Instantiate(Fireshot, new Vector3(transform.position.x, transform.position.y, 0), transform.rotation);
             GameManager.instance.PlaySE("Fire");
         }
-        else if (GetElement(1) == 1)
+        else if (GetElement(0) == 1)
         {
             attack_ing = true;
             animaitor.SetInteger("Attack_element", 1);
             Instantiate(Watershot, new Vector3(transform.position.x, transform.position.y, 0), transform.rotation);
             GameManager.instance.PlaySE("Water");
         }
-        else if (GetElement(1) == 2)
+        else if (GetElement(0) == 2)
         {
             attack_ing = true;
             animaitor.SetInteger("Attack_element", 2);
             Instantiate(Windshot, new Vector3(transform.position.x, transform.position.y, 0), transform.rotation);
             GameManager.instance.PlaySE("Wind");
         }
-        else if (GetElement(1) == 3)
+        else if (GetElement(0) == 3)
         {
             attack_ing = true;
             animaitor.SetInteger("Attack_element", 3);
