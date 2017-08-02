@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Monster : MonoBehaviour {
-    
+
+    private Animator animaitor;
     public int StartDirection; //어느 방향으로
     public int StepNumber; //몇발자국
     public float MoveSpeed; //얼마나 빨리
@@ -30,22 +31,27 @@ public class Monster : MonoBehaviour {
         Size = GetComponent<CoordinateCollider>().Size;
         GridSize = GameObject.Find("Player").GetComponent<PlayerController>().GridSize;
         oldCoord = SetCoordinate();
+        animaitor = this.GetComponent<Animator>();
     }
 	
 	// Update is called once per frame
 	void Update ()
     {
         Move();
-
         if (HP <= 0)
             Die();
     }
 
     void Move()
     {
+        animaitor.SetBool("Run",true);
+
         if(!turnBack)
         {
-            if(StartDirection == 0)
+
+         animaitor.SetInteger("Direction", StartDirection);
+
+            if (StartDirection == 0)
                 MoveVec = new Vector3(0, 1, 0);
             else if (StartDirection == 1)
                 MoveVec = new Vector3(0, -1, 0);
@@ -61,9 +67,16 @@ public class Monster : MonoBehaviour {
             else if (StartDirection == 1)
                 MoveVec = new Vector3(0, 1, 0);
             else if (StartDirection == 2)
+            {
+
+                animaitor.SetInteger("Direction", StartDirection + 1);
                 MoveVec = new Vector3(1, 0, 0);
+            }
             else if (StartDirection == 3)
+            {
+                animaitor.SetInteger("Direction", StartDirection - 1);
                 MoveVec = new Vector3(-1, 0, 0);
+            }
         }
 
         if (idleTimer <= 0) //움직임
