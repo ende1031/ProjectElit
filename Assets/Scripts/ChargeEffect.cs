@@ -25,6 +25,8 @@ public class ChargeEffect : MonoBehaviour {
 
     public int charge_stat;
 
+    public GameObject chargeCircle;
+
     void Awake()
     {
         if (instance == null)
@@ -89,6 +91,9 @@ public class ChargeEffect : MonoBehaviour {
 
     public void ChangeE(Image E_image, int E_num)
     {
+        chargeCircle.SetActive(false);
+        chargeCircle.SetActive(true);
+
         if (E_num == 0)
         {
             E_image.sprite = fire_charge_effect;
