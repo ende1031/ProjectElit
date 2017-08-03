@@ -42,6 +42,7 @@ public class ChargeEffect : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
+        chargeCircle.SetActive(false);
         first_Canvas.SetActive(false);
         second_Canvas.SetActive(false);
         third_Canvas.SetActive(false);
