@@ -21,6 +21,8 @@ public class ElementalMagic : MonoBehaviour
 
     Vector2 effect_offset;
 
+    Quaternion explosionRotation;
+
     // Use this for initialization
     void Start()
     {
@@ -47,6 +49,7 @@ public class ElementalMagic : MonoBehaviour
                 RenderObject_start.transform.Rotate(0, 0, -90);
                 RenderObject_shooting.transform.Rotate(0, 0, -90);
                 RenderObject_shooting.transform.position = new Vector3(RenderObject_start.transform.position.x + effect_offset.y, RenderObject_start.transform.position.y - effect_offset.x, RenderObject_start.transform.position.z);
+                explosionRotation = Quaternion.Euler(0, 0, -90);
             }
             else if (dir == 1)
             {
@@ -54,11 +57,13 @@ public class ElementalMagic : MonoBehaviour
                 RenderObject_start.transform.Rotate(0, 0, 90);
                 RenderObject_shooting.transform.Rotate(0, 0, 90);
                 RenderObject_shooting.transform.position = new Vector3(RenderObject_start.transform.position.x - effect_offset.y, RenderObject_start.transform.position.y + effect_offset.x, RenderObject_start.transform.position.z);
+                explosionRotation = Quaternion.Euler(0, 0, 90);
             }
             else if (dir == 2)
             {
                 MoveVec = new Vector3(-1, 0, 0);
                 RenderObject_shooting.transform.position = new Vector3(RenderObject_start.transform.position.x + effect_offset.x, RenderObject_start.transform.position.y + effect_offset.y, RenderObject_start.transform.position.z);
+                explosionRotation = Quaternion.Euler(0, 0, 0);
             }
             else if (dir == 3)
             {
@@ -66,9 +71,10 @@ public class ElementalMagic : MonoBehaviour
                 RenderObject_start.transform.Rotate(0, 0, 180);
                 RenderObject_shooting.transform.Rotate(0, 0, 180);
                 RenderObject_shooting.transform.position = new Vector3(RenderObject_start.transform.position.x - effect_offset.x, RenderObject_start.transform.position.y - effect_offset.y, RenderObject_start.transform.position.z);
+                explosionRotation = Quaternion.Euler(0, 0, 180);
             }
         }
-        else if(Element == 3) //실드
+        else if (Element == 3) //실드
         {
 
         }
@@ -105,7 +111,11 @@ public class ElementalMagic : MonoBehaviour
         {
             if (ObjectManager.instance.isPlace(Coordinate, "monster"))
                 ObjectManager.instance.PlacedObject(Coordinate, "monster").GetComponent<Monster>().Hit(1); //충돌한 몬스터한테 1만큼 피해
-            Instantiate(ExplosionEff, new Vector3(transform.position.x, transform.position.y, -1), Quaternion.identity);
+
+            GameObject ExplosionTemp = Instantiate(ExplosionEff, new Vector3(transform.position.x, transform.position.y, -1), Quaternion.identity);
+            ExplosionTemp.transform.Find("render").transform.rotation = explosionRotation;
+            if (Element == 2)
+                ExplosionTemp.transform.Find("render").transform.position = new Vector3(RenderObject_shooting.transform.position.x, RenderObject_shooting.transform.position.y, -1);
             Destroy(this.gameObject);
         }
 
