@@ -213,7 +213,11 @@ public class PlayerController : MonoBehaviour
             //맨 앞의 방해구슬 개수 체크
             if (GetTailLength() > 0 && GetTailLength() != NullElementNum) //꼬리가 0개보다 많을 때,맨 앞 방해구슬보다 많을 때 만 검사
             {
-                if (Droplist[NullElementNum].GetComponent<ElementDrop>().Element == 4)
+                if (GetTailLength() < NullElementNum)
+                {
+                    NullElementNum--;
+                }
+                else if (Droplist[NullElementNum].GetComponent<ElementDrop>().Element == 4)
                 {
                     NullElementNum++;
                 }
