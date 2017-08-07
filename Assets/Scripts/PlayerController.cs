@@ -192,20 +192,20 @@ public class PlayerController : MonoBehaviour
                 // 차지 이펙트 추가 관련 코드
                 if (chargeTimer > 2 && ChargeEffect.instance.charge_stat == 2 && Chargelist[4] > 2)
                 {
-                    ChargeEffect.instance.ChangeE(ChargeEffect.instance.third_charge_image, GetElement(2));
+                    ChargeEffect.instance.ChangeE(ChargeEffect.instance.third_Canvas, GetElement(2));
                     ChargeEffect.instance.Chargethird();
                 }
 
                 else if (chargeTimer > 1 && ChargeEffect.instance.charge_stat == 1 && Chargelist[4] > 1)
                 {
-                    ChargeEffect.instance.ChangeE(ChargeEffect.instance.ssecond_charge_image, GetElement(1));
-                    ChargeEffect.instance.ChangeE(ChargeEffect.instance.second_charge_image, GetElement(1));
+                    ChargeEffect.instance.ChangeE(ChargeEffect.instance.ssecond_Canvas, GetElement(1));
+                    ChargeEffect.instance.ChangeE(ChargeEffect.instance.second_Canvas, GetElement(1));
                     ChargeEffect.instance.ChargeSSecond();
                 }
 
                 else if (ChargeEffect.instance.charge_stat == 0 && Chargelist[4] > 0)
                 {
-                    ChargeEffect.instance.ChangeE(ChargeEffect.instance.first_charge_image, GetElement(0));
+                    ChargeEffect.instance.ChangeE(ChargeEffect.instance.first_Canvas, GetElement(0));
                     ChargeEffect.instance.Chargefirst();
                 }
             }

@@ -12,16 +12,10 @@ public class ChargeEffect : MonoBehaviour {
     public GameObject third_Canvas;
     public GameObject ssecond_Canvas;
 
-    public Sprite fire_charge_effect;
-    public Sprite water_charge_effect;
-    public Sprite wind_charge_effect;
-    public Sprite sand_charge_effect;
-    public Sprite null_charge_effect;
-
-    public Image first_charge_image;
-    public Image second_charge_image;
-    public Image third_charge_image;
-    public Image ssecond_charge_image;
+    public AnimatorOverrideController fire_charge_effect;
+    public AnimatorOverrideController water_charge_effect;
+    public AnimatorOverrideController wind_charge_effect;
+    public AnimatorOverrideController sand_charge_effect;
 
     public int charge_stat;
 
@@ -90,34 +84,29 @@ public class ChargeEffect : MonoBehaviour {
         charge_stat = 0;
     }
 
-    public void ChangeE(Image E_image, int E_num)
+    public void ChangeE(GameObject E_image, int E_num)
     {
         chargeCircle.SetActive(false);
         chargeCircle.SetActive(true);
 
         if (E_num == 0)
         {
-            E_image.sprite = fire_charge_effect;
+            E_image.GetComponent<Animator>().runtimeAnimatorController = fire_charge_effect;
         }
 
         else if (E_num == 1)
         {
-            E_image.sprite = water_charge_effect;
+            E_image.GetComponent<Animator>().runtimeAnimatorController = water_charge_effect;
         }
 
         else if (E_num == 2)
         {
-            E_image.sprite = wind_charge_effect;
+            E_image.GetComponent<Animator>().runtimeAnimatorController = wind_charge_effect;
         }
 
         else if (E_num == 3)
         {
-            E_image.sprite = sand_charge_effect;
-        }
-
-        else
-        {
-            E_image.sprite = null_charge_effect;
+            E_image.GetComponent<Animator>().runtimeAnimatorController = sand_charge_effect;
         }
     }
 }
