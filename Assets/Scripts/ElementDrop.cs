@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //꼬리 구슬
-public class ElementDrop : MonoBehaviour {
+public class ElementDrop : MonoBehaviour
+{
 
     public int Element; //0:불, 1:물, 2:바람, 3:땅, 4:방해
 
@@ -17,13 +18,15 @@ public class ElementDrop : MonoBehaviour {
     public int DropNumber; //이 꼬리구슬이 앞에서 몇 번째 구슬인지
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         GridSize = GameObject.Find("Player").GetComponent<PlayerController>().GridSize;
         MoveSpeed = GameObject.Find("Player").GetComponent<PlayerController>().MoveSpeed;
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
         switch (Element) //각 속성별로 다르게 실행되는걸 넣어보자. (ex: 스프라이트 애니메이션)
         {
             case 0: //불속성
