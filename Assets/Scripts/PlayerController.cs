@@ -438,7 +438,7 @@ public class PlayerController : MonoBehaviour
     public void OnPointerUp()
     {
         buttonDown = false;
-        if (MoveExeption) Attack();
+        //if (MoveExeption) Attack();
     }
 
     //공격. 버튼UI에서 이 함수 실행
