@@ -79,6 +79,8 @@ public class PlayerController : MonoBehaviour
     bool buttonUP;
     int[] Chargelist = new int[5];
 
+    bool MoveExeption;
+
     // Use this for initialization
     void Start()
     {
@@ -107,6 +109,7 @@ public class PlayerController : MonoBehaviour
 
         buttonDown = false;
         buttonUP = true;
+        MoveExeption = false;
     }
 
     // Update is called once per frame
@@ -145,7 +148,7 @@ public class PlayerController : MonoBehaviour
             {
                 Attack();
             }
-
+            //Chargelist에 플레이어 뒤 3개의 원소 저장
             if (Input.GetKeyDown(KeyCode.Space) || (buttonDown && buttonUP))
             {
                 for (int i = 0; i < 3; i++)
@@ -153,11 +156,11 @@ public class PlayerController : MonoBehaviour
                     if (GetTailLength() - NullElementNum < i + 1) break; // 꼬리 길이가 3개보다 적으면 패스
 
                     //불 = 0, 물 = 1, 바람 = 2, 땅 = 3
-                    if (GetElement(i) == 0)
+                    if (GetElement(i) == 0) 
                     {
                         if (Chargelist[1] > 0) break;
                         Chargelist[0] += 1;
-                        Chargelist[4]++;
+                        Chargelist[4]++; //차지리스트에 몇개의 원소가 들어갔는지 저장
                     }
 
                     else if (GetElement(i) == 1)
@@ -427,7 +430,7 @@ public class PlayerController : MonoBehaviour
             canCangeDir = true;
         }
     }
-
+    //UI상의 버튼이 눌렸는지 안눌렸는지 확인
     public void OnPointerDown()
     {
         buttonDown = true;
@@ -435,6 +438,7 @@ public class PlayerController : MonoBehaviour
     public void OnPointerUp()
     {
         buttonDown = false;
+        if (MoveExeption) Attack();
     }
 
     //공격. 버튼UI에서 이 함수 실행
@@ -564,16 +568,21 @@ public class PlayerController : MonoBehaviour
             immortal = true;
             GameManager.instance.PlaySE("Sand");
         }
-        ResetAttack(1);
+        ResetAttack(1);//아직 조합이 안되서 1로 고정
     }
 
     void ResetAttack(int charge_num)
     {
+        // 꼬리에 몇개의 원소를 자를건지 결정
         for (int i = 0; i < charge_num; i++) 
-            RemoveDrop(); 
+            RemoveDrop();
+
+        //버튼 누른 시간, 원소조합 초기화
         chargeTimer = 0;
         for (int j = 0; j < 5; j++)
             Chargelist[j] = 0;
+
+        //버튼 주위 원소 비활성화
         ChargeEffect.instance.ChargeReset();
         buttonUP = true;
         buttonDown = false;
@@ -584,11 +593,20 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0)) //드래그 시작
         {
+            if (buttonDown)
+            {
+                MoveExeption = true;
+            }
             mousePos_start = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10);
         }
 
         if (Input.GetMouseButtonUp(0)) //드래그 끝. 방향전환 적용
         {
+            if (MoveExeption)
+            {
+                MoveExeption = false;
+                return;
+            }
             mousePos_end = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10);
 
             if (Mathf.Abs(mousePos_start.x - mousePos_end.x) < Mathf.Abs(mousePos_start.y - mousePos_end.y)) // y축 이동
