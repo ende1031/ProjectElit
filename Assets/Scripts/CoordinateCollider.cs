@@ -12,6 +12,7 @@ public class CoordinateCollider : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
+        if (GameObject.Find("Player") == null) return;
         GridSize = GameObject.Find("Player").GetComponent<PlayerController>().GridSize;
     }
 	
