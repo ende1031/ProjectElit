@@ -83,6 +83,7 @@
     <Compile Include="Assets\Scripts\CamaraController.cs" />
     <Compile Include="Assets\Scripts\ChargeEffect.cs" />
     <Compile Include="Assets\Scripts\CoordinateCollider.cs" />
+    <Compile Include="Assets\Scripts\Destroy.cs" />
     <Compile Include="Assets\Scripts\EffectEvent.cs" />
     <Compile Include="Assets\Scripts\ElementDrop.cs" />
     <Compile Include="Assets\Scripts\ElementSpawn.cs" />

@@ -39,6 +39,9 @@ public class SelectStage : MonoBehaviour
             case 5:
                 GameManager.instance.FadeAndLoadScene("Stage1-5");
                 break;
+            case 6:
+                GameManager.instance.FadeAndLoadScene("Stage2-1");
+                break;
         }
     }
 }
