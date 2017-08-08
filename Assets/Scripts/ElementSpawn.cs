@@ -16,11 +16,16 @@ public class ElementSpawn : MonoBehaviour
     public GameObject NullBall_sand;
 
     public int elemntLimit;
+
+    Vector3 randomPos;
+    int randomElement;
+    int randomNullElement;
+
     // Use this for initialization
     void Start()
     {
         ObjectManager.instance.FieldElementNum = 0;
-        InvokeRepeating("SpawnElement", 3, 1);//게임 시작 3초뒤에 1초 마다 반복
+        InvokeRepeating("RandomElementSpawn", 3, 1);//게임 시작 3초뒤에 1초 마다 반복
     }
 
     // Update is called once per frame
@@ -29,14 +34,11 @@ public class ElementSpawn : MonoBehaviour
 
     }
 
-    void SpawnElement()
+    void RandomEmptyPosition()
     {
-        if (ObjectManager.instance.FieldElementNum > elemntLimit) return;
-        int tryNum = 0;//한번에 SpawnElement가 실행된 횟수.
+        int tryNum = 0;//한번에 RandomEmptyPosition이 실행된 횟수.
 
-        Vector2 randomPos = new Vector3(Random.Range(-14, 15), Random.Range(-8, 9));
-        int randomElement = (int)Random.Range(0, 5);
-        int randomNullElement = (int)Random.Range(0, 5);
+        randomPos = new Vector3(Random.Range(-14, 15), Random.Range(-8, 9), 0);
 
         while (ObjectManager.instance.isPlace(randomPos, "tree") || ObjectManager.instance.isPlace(randomPos, "monster")
             || ObjectManager.instance.isPlace(randomPos, "tail") || ObjectManager.instance.isPlace(randomPos, "null_ball")
@@ -45,32 +47,52 @@ public class ElementSpawn : MonoBehaviour
         {
             if (tryNum > 10) return;
             tryNum++;
-            randomPos.Set(Random.Range(-14, 15), Random.Range(-8, 9));
+            randomPos.Set(Random.Range(-14, 15), Random.Range(-8, 9), 0);
         }
 
         tryNum = 0;
+    }
+
+    void SpawnElement(int ElementType, int NullElementType, Vector3 Position)
+    {
+        //필드상 구슬개수 카운트
         ObjectManager.instance.FieldElementNum++;
 
-        if (randomElement == 0)
-            Instantiate(FireBall, randomPos, Quaternion.identity);
-        else if (randomElement == 1)
-            Instantiate(WaterBall, randomPos, Quaternion.identity);
-        else if (randomElement == 2)
-            Instantiate(WindBall, randomPos, Quaternion.identity);
-        else if (randomElement == 3)
-            Instantiate(SandBall, randomPos, Quaternion.identity);
-
+        //기본 구슬 4가지
+        if (ElementType == 0)
+            Instantiate(FireBall, Position, Quaternion.identity);
+        else if (ElementType == 1)
+            Instantiate(WaterBall, Position, Quaternion.identity);
+        else if (ElementType == 2)
+            Instantiate(WindBall, Position, Quaternion.identity);
+        else if (ElementType == 3)
+            Instantiate(SandBall, Position, Quaternion.identity);
+        //방해구슬 4가지
         else if (randomElement == 4)
         {
-            if (randomNullElement == 0)
-                Instantiate(NullBall_fire, randomPos, Quaternion.identity);
-            else if (randomNullElement == 1)
-                Instantiate(NullBall_water, randomPos, Quaternion.identity);
-            else if (randomNullElement == 2)
-                Instantiate(NullBall_wind, randomPos, Quaternion.identity);
-            else if (randomNullElement == 3)
-                Instantiate(NullBall_sand, randomPos, Quaternion.identity);
+            if (NullElementType == 0)
+                Instantiate(NullBall_fire, Position, Quaternion.identity);
+            else if (NullElementType == 1)
+                Instantiate(NullBall_water, Position, Quaternion.identity);
+            else if (NullElementType == 2)
+                Instantiate(NullBall_wind, Position, Quaternion.identity);
+            else if (NullElementType == 3)
+                Instantiate(NullBall_sand, Position, Quaternion.identity);
         }
         return;
+    }
+
+    void RandomElementSpawn()
+    {
+
+        //필드상의 구슬이 제한량 보다 많으면 실행 안함
+        if (ObjectManager.instance.FieldElementNum > elemntLimit) return;
+        //속성구슬 정하기
+        randomElement = (int)Random.Range(0, 5);
+        randomNullElement = (int)Random.Range(0, 5);
+        //위치 정하기
+        RandomEmptyPosition();
+        //구슬 소환
+        SpawnElement(randomElement, randomNullElement, randomPos);
     }
 }
