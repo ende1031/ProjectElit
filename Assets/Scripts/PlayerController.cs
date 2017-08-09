@@ -361,12 +361,9 @@ public class PlayerController : MonoBehaviour
             int temp = ObjectManager.instance.PlacedObject(Coordinate, "tail").GetComponent<ElementDrop>().DropNumber;
             Debug.Log(temp + "번째 꼬리와 충돌");
 
-            for (int i = 0; i < Droplist.Count; i++)
+            for (int i = Droplist.Count; i > temp; i--)
             {
-                if (i >= temp)
-                {
-                    RemoveDropAt(temp);
-                }
+                RemoveDropAt(temp);
             }
         }
     }
