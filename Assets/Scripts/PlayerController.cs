@@ -435,7 +435,6 @@ public class PlayerController : MonoBehaviour
     public void OnPointerUp()
     {
         buttonDown = false;
-        //if (MoveExeption) Attack();
     }
 
     //공격. 버튼UI에서 이 함수 실행
@@ -561,7 +560,7 @@ public class PlayerController : MonoBehaviour
             animaitor.SetInteger("Attack_element", 3);
             if (immortal_timer == 0)
                 Instantiate(Sandshot, new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity);
-            immortal_timer = 3;
+            immortal_timer = 2;
             immortal = true;
             GameManager.instance.PlaySE("Sand");
         }
@@ -602,6 +601,7 @@ public class PlayerController : MonoBehaviour
             if (MoveExeption)
             {
                 MoveExeption = false;
+                ResetAttack(0);
                 return;
             }
             mousePos_end = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10);
