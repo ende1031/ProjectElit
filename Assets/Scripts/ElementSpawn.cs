@@ -20,12 +20,21 @@ public class ElementSpawn : MonoBehaviour
     Vector3 randomPos;
     int randomElement;
     int randomNullElement;
+    float top, bot, left, right;
 
     // Use this for initialization
     void Start()
     {
         ObjectManager.instance.FieldElementNum = 0;
         InvokeRepeating("RandomElementSpawn", 3, 1);//게임 시작 3초뒤에 1초 마다 반복
+
+        randomElement = 0;
+        randomNullElement = 0;
+        top = GameObject.Find("topWall").transform.position.y;
+        bot = GameObject.Find("botWall").transform.position.y;
+        left = GameObject.Find("leftWall").transform.position.x;
+        right = GameObject.Find("rightWall").transform.position.x;
+
     }
 
     // Update is called once per frame
@@ -38,7 +47,7 @@ public class ElementSpawn : MonoBehaviour
     {
         int tryNum = 0;//한번에 RandomEmptyPosition이 실행된 횟수.
 
-        randomPos = new Vector3(Random.Range(-14, 15), Random.Range(-8, 9), 0);
+        randomPos = new Vector3((int)Random.Range(left, right), (int)Random.Range(bot, top), 0);
 
         while (ObjectManager.instance.isPlace(randomPos, "tree") || ObjectManager.instance.isPlace(randomPos, "monster")
             || ObjectManager.instance.isPlace(randomPos, "tail") || ObjectManager.instance.isPlace(randomPos, "null_ball")
@@ -47,7 +56,7 @@ public class ElementSpawn : MonoBehaviour
         {
             if (tryNum > 10) return;
             tryNum++;
-            randomPos.Set(Random.Range(-14, 15), Random.Range(-8, 9), 0);
+            randomPos.Set((int)Random.Range(left, right), (int)Random.Range(bot, top), 0);
         }
 
         tryNum = 0;
