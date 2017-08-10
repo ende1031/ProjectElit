@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Monster : MonoBehaviour {
 
+    public int MonsterType; //0:위습, 1:버섯, 2:풀도치, 3:기사, 4:흑마법사, 5:거대골렘
     private Animator animaitor;
     public int StartDirection; //어느 방향으로
     public int StepNumber; //몇발자국
@@ -31,13 +32,19 @@ public class Monster : MonoBehaviour {
         Size = GetComponent<CoordinateCollider>().Size;
         GridSize = GameObject.Find("Player").GetComponent<PlayerController>().GridSize;
         oldCoord = SetCoordinate();
-        animaitor = this.GetComponent<Animator>();
+
+        if(this.GetComponent<Animator>() != null)
+            animaitor = this.GetComponent<Animator>();
+        else //일부 몬스터(위습)은 자식오브젝트("render")에 애니메이터가 있으므로
+            animaitor = transform.Find("render").GetComponent<Animator>();
     }
 	
 	// Update is called once per frame
 	void Update ()
     {
-        Move();
+        if(MonsterType != 2) //풀도치는 안움직임
+            Move();
+
         if (HP <= 0)
             Die();
     }
