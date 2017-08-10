@@ -174,7 +174,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    //맞았을 때 실행
+    //벽이나 몬스터에 몸박 했을 때 실행
     void Hit()
     {
         hitTimer += Time.deltaTime;
@@ -193,6 +193,22 @@ public class PlayerController : MonoBehaviour
             }
             hitTimer = 0;
             AttackRef.ResetAttack(0);
+        }
+    }
+
+    //몬스터의 공격에 피격됐을때 실행
+    public void Hit_attack()
+    {
+        animaitor.SetBool("Hitted", true);
+        hit_ing = true;
+
+        if (GetTailLength() == 0 || GetTailLength() == NullElementNum)
+        {
+            Die();
+        }
+        else if (GetTailLength() > 0)
+        {
+            RemoveDrop();
         }
     }
 

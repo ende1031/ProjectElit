@@ -25,6 +25,9 @@ public class Monster : MonoBehaviour {
     public GameObject WindBall;
     public GameObject SandBall;
 
+    bool isAttack = false;
+    int AttackDir;
+
     // Use this for initialization
     void Start ()
     {
@@ -42,13 +45,88 @@ public class Monster : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        if(MonsterType != 2) //풀도치는 안움직임
+        if (MonsterType != 2 && isAttack == false) //풀도치는 안움직임
             Move();
+
+        if (MonsterType == 0) //일단 위습만 공격하게 해놓음
+            WispAttack();
 
         if (HP <= 0)
             Die();
     }
 
+    //위습 공격. 수정해서 다른 몬스터도 사용 가능하게 만들 예정
+    void WispAttack()
+    {
+        Vector2 temp_coord = SetCoordinate();
+
+        if (ObjectManager.instance.isPlace(new Vector2(temp_coord.x, temp_coord.y + 1), "Player")) //위쪽
+        {
+            isAttack = true;
+            AttackDir = 0;
+            animaitor.SetBool("isAttack", isAttack);
+            animaitor.SetInteger("AttackDir", 0);
+        }
+        else if (ObjectManager.instance.isPlace(new Vector2(temp_coord.x, temp_coord.y - 1), "Player")) //아래
+        {
+            isAttack = true;
+            AttackDir = 1;
+            animaitor.SetBool("isAttack", isAttack);
+            animaitor.SetInteger("AttackDir", 1);
+        }
+        else if (ObjectManager.instance.isPlace(new Vector2(temp_coord.x - 1, temp_coord.y), "Player")) //왼쪽
+        {
+            isAttack = true;
+            AttackDir = 2;
+            animaitor.SetBool("isAttack", isAttack);
+            animaitor.SetInteger("AttackDir", 2);
+        }
+        else if (ObjectManager.instance.isPlace(new Vector2(temp_coord.x + 1, temp_coord.y), "Player")) //오른쪽
+        {
+            isAttack = true;
+            AttackDir = 3;
+            animaitor.SetBool("isAttack", isAttack);
+            animaitor.SetInteger("AttackDir", 3);
+        }
+    }
+
+    //공격을 마치고 다시 이동 시작
+    public void AttackEnd()
+    {
+        isAttack = false;
+        animaitor.SetBool("isAttack", isAttack);
+    }
+
+    //공격중 피격판정이 생기는 타이밍에 실행되는 함수
+    public void HitPlayer()
+    {
+        Vector2 temp_coord = SetCoordinate();
+        bool attackSuccess = false;
+
+        if (AttackDir == 0 && ObjectManager.instance.isPlace(new Vector2(temp_coord.x, temp_coord.y + 1), "Player"))
+        {
+            attackSuccess = true;
+        }
+        else if (AttackDir == 1 && ObjectManager.instance.isPlace(new Vector2(temp_coord.x, temp_coord.y - 1), "Player"))
+        {
+            attackSuccess = true;
+        }
+        else if (AttackDir == 2 && ObjectManager.instance.isPlace(new Vector2(temp_coord.x - 1, temp_coord.y), "Player"))
+        {
+            attackSuccess = true;
+        }
+        else if (AttackDir == 3 && ObjectManager.instance.isPlace(new Vector2(temp_coord.x + 1, temp_coord.y), "Player"))
+        {
+            attackSuccess = true;
+        }
+
+        if (attackSuccess)
+        {
+            GameObject.Find("Player").GetComponent<PlayerController>().Hit_attack();
+        }
+    }
+
+    //일단 일정 범위를 반복해서 움직이는 함수
     void Move()
     {
         animaitor.SetBool("Run",true);
