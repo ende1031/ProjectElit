@@ -5,7 +5,7 @@ using UnityEngine;
 public class ElementalMagic : MonoBehaviour
 {
     public float moveSpeed = 7.0f;
-    public int Element; // 0:불, 1:물, 2:바람, 3:땅, 4이후:속성조합마법(추후 지정)
+    public int Element; // 0:불, 1:물, 2:바람, 3:땅, 4:물+땅, 5:불+땅, 6:바람+땅, 7:이후:속성조합마법(추후 지정)
     public GameObject ExplosionEff;
 
     private Quaternion angle = Quaternion.identity;
@@ -96,7 +96,7 @@ public class ElementalMagic : MonoBehaviour
         {
             Fireball();
         }
-        else if (Element == 3) //실드
+        else if (Element == 3 || Element == 4 || Element == 5 || Element == 6 ) //실드
         {
             shield();
         }
