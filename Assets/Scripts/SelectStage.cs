@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class SelectStage : MonoBehaviour
 {
-
+    int UnlockedStage;
     // Use this for initialization
     void Start()
     {
-
+        UnlockedStage = GameObject.Find("GameManager").GetComponent<SaveManager>().Parse();
     }
 
     // Update is called once per frame
@@ -22,6 +22,7 @@ public class SelectStage : MonoBehaviour
 
     public void goStage(int s)
     {
+        if (s > UnlockedStage + 1) return;
         switch (s)
         {
             case 1:
@@ -42,6 +43,25 @@ public class SelectStage : MonoBehaviour
             case 6:
                 GameManager.instance.FadeAndLoadScene("Stage2-1");
                 break;
+            case 7:
+                GameManager.instance.FadeAndLoadScene("Stage2-2");
+                break;
+            case 8:
+                GameManager.instance.FadeAndLoadScene("Stage2-3");
+                break;
+            case 9:
+                GameManager.instance.FadeAndLoadScene("Stage2-4");
+                break;
+            case 10:
+                GameManager.instance.FadeAndLoadScene("Stage2-5");
+                break;
         }
     }
+
+    public void goChapter(int s)
+    {
+        if (s * 5 > UnlockedStage + 1) return;
+
+    }
+
 }

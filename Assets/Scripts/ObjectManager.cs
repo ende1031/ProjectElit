@@ -6,21 +6,6 @@ public class ObjectManager : MonoBehaviour {
 
     public static ObjectManager instance = null;
 
-    //public class ObjectSet
-    //{
-    //    public ObjectSet(bool t, Vector2 c, Vector2 s)
-    //    {
-    //        isTriger = t;
-    //        Coord = c;
-    //        Size = s;
-    //    }
-    //    public bool isTriger;
-    //    public Vector2 Coord; //왼쪽 아래를 기준으로
-    //    public Vector2 Size; //왼쪽 아래를 기준으로 몇*몇칸인지
-    //}
-
-    //List<ObjectSet> Objectlist = new List<ObjectSet>(); //충돌가능한 모든 오브젝트를 가지고 있는 리스트
-
     void Awake()
     {
         if (instance == null)
