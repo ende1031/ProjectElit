@@ -48,45 +48,62 @@ public class Monster : MonoBehaviour {
         if (MonsterType != 2 && isAttack == false) //풀도치는 안움직임
             Move();
 
-        if (MonsterType == 0) //일단 위습만 공격하게 해놓음
-            WispAttack();
+        if (MonsterType == 0 || MonsterType == 2) //일단 위습이랑 풀도치만 공격하게 해놓음
+            MonsterAttack();
 
         if (HP <= 0)
             Die();
     }
 
-    //위습 공격. 수정해서 다른 몬스터도 사용 가능하게 만들 예정
-    void WispAttack()
+    // 몬스터 공격.
+    // 시간관계상 코드가 더러움. 엘릿퀘스트 확장팩 나와서 몹 종류 많아지면 코드 정리함.
+    void MonsterAttack()
     {
         Vector2 temp_coord = SetCoordinate();
+
+        if (transform.position.x > 0 && MonsterType == 2) //0보다 클 경우 오른쪽칸을 기준으로 하므로 x좌표에서 1을 빼서 왼쪽 기준으로 만듬
+            temp_coord.x -= 1;
 
         if (ObjectManager.instance.isPlace(new Vector2(temp_coord.x, temp_coord.y + 1), "Player")) //위쪽
         {
             isAttack = true;
             AttackDir = 0;
-            animaitor.SetBool("isAttack", isAttack);
-            animaitor.SetInteger("AttackDir", 0);
+        }
+        else if (ObjectManager.instance.isPlace(new Vector2(temp_coord.x + 1, temp_coord.y + 1), "Player") && MonsterType == 2) //위쪽2 (풀도치)
+        {
+            isAttack = true;
+            AttackDir = 0;
         }
         else if (ObjectManager.instance.isPlace(new Vector2(temp_coord.x, temp_coord.y - 1), "Player")) //아래
         {
             isAttack = true;
             AttackDir = 1;
-            animaitor.SetBool("isAttack", isAttack);
-            animaitor.SetInteger("AttackDir", 1);
+        }
+        else if (ObjectManager.instance.isPlace(new Vector2(temp_coord.x + 1, temp_coord.y - 1), "Player") && MonsterType == 2) //아래2 (풀도치)
+        {
+            isAttack = true;
+            AttackDir = 1;
         }
         else if (ObjectManager.instance.isPlace(new Vector2(temp_coord.x - 1, temp_coord.y), "Player")) //왼쪽
         {
             isAttack = true;
             AttackDir = 2;
-            animaitor.SetBool("isAttack", isAttack);
-            animaitor.SetInteger("AttackDir", 2);
         }
-        else if (ObjectManager.instance.isPlace(new Vector2(temp_coord.x + 1, temp_coord.y), "Player")) //오른쪽
+        else if (ObjectManager.instance.isPlace(new Vector2(temp_coord.x + 1, temp_coord.y), "Player") && MonsterType == 0) //오른쪽(위습)
         {
             isAttack = true;
             AttackDir = 3;
+        }
+        else if (ObjectManager.instance.isPlace(new Vector2(temp_coord.x + 2, temp_coord.y), "Player") && MonsterType == 2) //오른쪽(풀도치)
+        {
+            isAttack = true;
+            AttackDir = 3;
+        }
+
+        if(isAttack)
+        {
             animaitor.SetBool("isAttack", isAttack);
-            animaitor.SetInteger("AttackDir", 3);
+            animaitor.SetInteger("AttackDir", AttackDir);
         }
     }
 
@@ -94,6 +111,10 @@ public class Monster : MonoBehaviour {
     public void AttackEnd()
     {
         isAttack = false;
+        if ( MonsterType == 2)
+        {
+            MonsterAttack();
+        }
         animaitor.SetBool("isAttack", isAttack);
     }
 
@@ -101,21 +122,35 @@ public class Monster : MonoBehaviour {
     public void HitPlayer()
     {
         Vector2 temp_coord = SetCoordinate();
+        if (transform.position.x > 0 && MonsterType == 2) //0보다 클 경우 오른쪽칸을 기준으로 하므로 x좌표에서 1을 빼서 왼쪽 기준으로 만듬
+            temp_coord.x -= 1;
         bool attackSuccess = false;
 
-        if (AttackDir == 0 && ObjectManager.instance.isPlace(new Vector2(temp_coord.x, temp_coord.y + 1), "Player"))
+        if (AttackDir == 0 && ObjectManager.instance.isPlace(new Vector2(temp_coord.x, temp_coord.y + 1), "Player")) //위
         {
             attackSuccess = true;
         }
-        else if (AttackDir == 1 && ObjectManager.instance.isPlace(new Vector2(temp_coord.x, temp_coord.y - 1), "Player"))
+        else if (AttackDir == 0 && ObjectManager.instance.isPlace(new Vector2(temp_coord.x + 1, temp_coord.y + 1), "Player") && MonsterType == 2) //위2(풀도치)
         {
             attackSuccess = true;
         }
-        else if (AttackDir == 2 && ObjectManager.instance.isPlace(new Vector2(temp_coord.x - 1, temp_coord.y), "Player"))
+        else if (AttackDir == 1 && ObjectManager.instance.isPlace(new Vector2(temp_coord.x, temp_coord.y - 1), "Player")) //아래
         {
             attackSuccess = true;
         }
-        else if (AttackDir == 3 && ObjectManager.instance.isPlace(new Vector2(temp_coord.x + 1, temp_coord.y), "Player"))
+        else if (AttackDir == 1 && ObjectManager.instance.isPlace(new Vector2(temp_coord.x + 1, temp_coord.y - 1), "Player") && MonsterType == 2) //아래
+        {
+            attackSuccess = true;
+        }
+        else if (AttackDir == 2 && ObjectManager.instance.isPlace(new Vector2(temp_coord.x - 1, temp_coord.y), "Player")) //왼
+        {
+            attackSuccess = true;
+        }
+        else if (AttackDir == 3 && ObjectManager.instance.isPlace(new Vector2(temp_coord.x + 1, temp_coord.y), "Player") && MonsterType == 0) //오른(위습)
+        {
+            attackSuccess = true;
+        }
+        else if (AttackDir == 3 && ObjectManager.instance.isPlace(new Vector2(temp_coord.x + 2, temp_coord.y), "Player") && MonsterType == 2) //오른(풀도치)
         {
             attackSuccess = true;
         }
