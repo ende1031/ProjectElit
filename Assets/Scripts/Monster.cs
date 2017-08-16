@@ -27,6 +27,7 @@ public class Monster : MonoBehaviour {
 
     bool isAttack = false;
     int AttackDir;
+    bool isRun = false;
 
     // Use this for initialization
     void Start ()
@@ -164,8 +165,6 @@ public class Monster : MonoBehaviour {
     //일단 일정 범위를 반복해서 움직이는 함수
     void Move()
     {
-        animaitor.SetBool("Run",true);
-
         if(!turnBack)
         {
 
@@ -201,12 +200,15 @@ public class Monster : MonoBehaviour {
 
         if (idleTimer <= 0) //움직임
         {
+            isRun = true;
             transform.Translate(MoveVec * MoveSpeed * Time.deltaTime);
         }
         else //대기
         {
+            isRun = false;
             idleTimer -= Time.deltaTime;
         }
+        animaitor.SetBool("isRun", isRun);
 
         //한칸 이동하면 MoveCount증가
         if (Mathf.Abs(oldCoord.x - transform.position.x) >= GridSize || Mathf.Abs(oldCoord.y - transform.position.y) >= GridSize)
