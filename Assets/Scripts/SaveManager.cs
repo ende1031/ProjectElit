@@ -6,7 +6,7 @@ using System.IO;
 
 public class SaveManager : MonoBehaviour
 {
-    public int level = 20;//언록된 스테이지 수(패치시엔 삭제 예정)
+    public int level;//언록된 스테이지 수(패치시엔 삭제 예정)
 
     string m_strPath = "Assets/Save/";
 

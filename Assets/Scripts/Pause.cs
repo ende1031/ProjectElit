@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class Pause : MonoBehaviour
@@ -62,7 +62,6 @@ public class Pause : MonoBehaviour
     //스테이지 다시 시작
     public void RestartStage()
     {
-        GameManager.instance.FadeAndLoadScene(EditorApplication.currentScene);
-        //Application.LoadLevel(Application.loadedLevel);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

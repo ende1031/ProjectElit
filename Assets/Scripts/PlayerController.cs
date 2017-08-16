@@ -704,6 +704,7 @@ public class PlayerController : MonoBehaviour
     void DeadScreen()
     {
         GameOverCanvas.SetActive(true);
+        this.gameObject.SetActive(false);
     }
 
     //꼬리 길이를 리턴

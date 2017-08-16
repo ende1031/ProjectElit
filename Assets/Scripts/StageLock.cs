@@ -14,7 +14,6 @@ public class StageLock : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         UnlockedStage = GameObject.Find("GameManager").GetComponent<SaveManager>().Parse();
-        Debug.Log(UnlockedStage);
         SelectLock();
     }
 
@@ -26,7 +25,6 @@ public class StageLock : MonoBehaviour {
             if (Stage[i] == null) continue;
             if (i > UnlockedStage)
             {
-                Debug.Log("Change");
                 Stage[i].sprite = Locked;
             }
             if (i == UnlockedStage) Stage[i].sprite = UnClear;
