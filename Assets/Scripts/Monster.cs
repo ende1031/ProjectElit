@@ -52,8 +52,20 @@ public class Monster : MonoBehaviour {
         if (MonsterType == 0 || MonsterType == 2) //일단 위습이랑 풀도치만 공격하게 해놓음
             MonsterAttack();
 
+        CollisionTail();
+
         if (HP <= 0)
             Die();
+    }
+
+    //플레이어의 꼬리 자르기
+    void CollisionTail()
+    {
+        if (ObjectManager.instance.isPlace(SetCoordinate(), "tail"))
+        {
+            int tempNum = ObjectManager.instance.PlacedObject(SetCoordinate(), "tail").GetComponent<ElementDrop>().DropNumber;
+            GameObject.Find("Player").GetComponent<PlayerController>().TailCutting(tempNum);
+        }
     }
 
     // 몬스터 공격.

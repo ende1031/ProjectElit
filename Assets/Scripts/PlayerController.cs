@@ -282,6 +282,27 @@ public class PlayerController : MonoBehaviour
             if (transform.position.x / GridSize >= Coordinate.x - 0.1 && Direction == 3)
                 Colliding();
         }
+        else if (ObjectManager.instance.isPlace(temp, "tail"))
+        {
+            if (ObjectManager.instance.PlacedObject(temp, "tail").GetComponent<ElementDrop>().Element == 4) //방해구슬도 몬스터처럼
+            {
+                isHit = false;
+                MoveSpeed = orgMoveSpeed;
+                if (transform.position.y / GridSize >= Coordinate.y - 0.1 && Direction == 0)
+                    Colliding();
+                if (transform.position.y / GridSize <= Coordinate.y + 0.1 && Direction == 1)
+                    Colliding();
+                if (transform.position.x / GridSize <= Coordinate.x + 0.1 && Direction == 2)
+                    Colliding();
+                if (transform.position.x / GridSize >= Coordinate.x - 0.1 && Direction == 3)
+                    Colliding();
+            }
+            else
+            {
+                isHit = false;
+                MoveSpeed = orgMoveSpeed;
+            }
+        }
         else
         {
             isHit = false;
@@ -294,13 +315,22 @@ public class PlayerController : MonoBehaviour
     {
         if (ObjectManager.instance.isPlace(Coordinate, "tail"))
         {
-            int temp = ObjectManager.instance.PlacedObject(Coordinate, "tail").GetComponent<ElementDrop>().DropNumber;
-            Debug.Log(temp + "번째 꼬리와 충돌");
-
-            for (int i = Droplist.Count; i > temp; i--)
+            if (ObjectManager.instance.PlacedObject(Coordinate, "tail").GetComponent<ElementDrop>().Element != 4)
             {
-                RemoveDropAt(temp);
+                int temp = ObjectManager.instance.PlacedObject(Coordinate, "tail").GetComponent<ElementDrop>().DropNumber;
+                TailCutting(temp);
+                Debug.Log(temp + "번째 꼬리와 충돌");
             }
+        }
+    }
+
+    //num번째 꼬리 뒤에 있는 꼬리 전부 제거
+    public void TailCutting(int num)
+    {
+        int temp = num;
+        for (int i = Droplist.Count; i > temp; i--)
+        {
+            RemoveDropAt(temp);
         }
     }
 
