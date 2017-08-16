@@ -99,10 +99,6 @@
     <Compile Include="Assets\Scripts\SelectStage.cs" />
     <Compile Include="Assets\Scripts\StageLock.cs" />
     <Compile Include="Assets\Scripts\Title.cs" />
-    <Compile Include="Assets\Scripts\mushroom_animation.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Assets\Save\Data.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
