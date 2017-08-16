@@ -13,7 +13,8 @@ public class StageLock : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        UnlockedStage = GameObject.Find("GameManager").GetComponent<SaveManager>().Parse();
+        UnlockedStage = GameObject.Find("GameManager").GetComponent<SaveManager>().OutputStage();
+        Debug.Log(UnlockedStage);
         SelectLock();
     }
 
@@ -21,7 +22,6 @@ public class StageLock : MonoBehaviour {
     {
         for (int i = 0; i < 15; i++)
         {
-            Debug.Log(i);
             if (Stage[i] == null) continue;
             if (i > UnlockedStage)
             {

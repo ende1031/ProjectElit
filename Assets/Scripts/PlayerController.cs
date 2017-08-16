@@ -199,6 +199,7 @@ public class PlayerController : MonoBehaviour
     //몬스터의 공격에 피격됐을때 실행
     public void Hit_attack()
     {
+        if (immortal) return;
         animaitor.SetBool("Hitted", true);
         hit_ing = true;
 

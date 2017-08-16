@@ -1,52 +1,76 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.IO;
-
-
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
+using System.Reflection;
 
 public class SaveManager : MonoBehaviour
 {
-    public int level;//언록된 스테이지 수(패치시엔 삭제 예정)
+    SaveData m_save = new SaveData();
 
-    string m_strPath = "Assets/Save/";
-
+    // Use this for initialization
     void Start()
     {
-        WriteData(level.ToString());//11번째 스테이지 (3-1)까지 클리어 임시로 강제 세이브 작성 (삭제예정)
+        InputStage(20); //개발용 코드 0 = 1스테이지 클리어(배포시 지울예정)
+        if (!File.Exists(Application.dataPath + "/Resources/save.dat")) InputStage(0);  //세이브 데이터가 없으면 새로 만든다.
     }
 
-    public void WriteData(string strData)//strData를 txt에 저장 (0 = 1-1스테이지)
+    void InputData()//클래스에 저장된 값을 직렬화 후 save.dat에저장한다.
     {
-        FileStream f = new FileStream(m_strPath + "Data.txt", FileMode.Create, FileAccess.ReadWrite);
-        StreamWriter writer = new StreamWriter(f);
-        writer.WriteLine(strData);
-        writer.Close();
-        f.Close();
+        try
+        {
+            var b = new BinaryFormatter();
+
+            var f = File.Create(Application.dataPath + "/Resources/save.dat");
+            Debug.Log(Application.dataPath);
+
+            b.Serialize(f, m_save);
+            f.Close();
+        }
+        catch (System.Exception ex)
+        {
+            Debug.Log(ex);
+        }
     }
 
-
-
-    public int Parse()
+    void OutputData()   //save.dat의 값들을 SaveData클래스로 불러온다.
     {
-        FileStream f = new FileStream(m_strPath + "Data.txt", FileMode.Open, FileAccess.ReadWrite);
-        StreamReader sr = new StreamReader(f);
+        try
+        {
+            if (File.Exists(Application.dataPath + "/Resources/save.dat"))
+            {
+                Debug.Log("Exists!!");
+                var b = new BinaryFormatter();
+                var f = File.Open(Application.dataPath + "/Resources/save.dat", FileMode.Open);
 
-        //한줄을 읽는다. 
-        string source = sr.ReadLine();
-        int Temp = int.Parse(source);
-        sr.Close();
-        f.Close();
-        return Temp;
-        //string[] values;    // 쉼표로 구분된 데이터들을 저장할 배열 (values[0]이면 첫번째 데이터 )
+                m_save = (SaveData)b.Deserialize(f);
+                f.Close();
+            }
 
-        //while (source != null)
-        //{
-        //    values = source.Split(',');  // 쉼표로 구분한다. 저장시에 쉼표로 구분하여 저장하였다.
-        //    if (values.Length == 0)
-        //    {
-        //        sr.Close();
-        //        return;
-        //    }
-        //    source = sr.ReadLine();    // 한줄 읽는다.
+        }
+        catch (System.Exception ex)
+        {
+            Debug.Log(ex);
+        }
     }
+
+    public void InputStage(int x)   //CleardStageNum를 바꾸고 파일로 저장한다.
+    {
+        m_save.CleardStageNum = x;
+        InputData();
+    }
+
+    public int OutputStage()    //SaveData의 CleardStageNum를 반환한다.
+    {
+        OutputData();
+        return m_save.CleardStageNum;
+    }
+}
+
+class SaveData // 직렬화를 위한 클래스. 원하는 자료형 추가 가능
+{
+    public int CleardStageNum = 0;
 }

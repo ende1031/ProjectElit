@@ -8,7 +8,7 @@ public class SelectStage : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        UnlockedStage = GameObject.Find("GameManager").GetComponent<SaveManager>().Parse();
+        UnlockedStage = GameObject.Find("GameManager").GetComponent<SaveManager>().OutputStage();
     }
 
     // Update is called once per frame
