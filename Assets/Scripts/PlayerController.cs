@@ -58,7 +58,7 @@ public class PlayerController : MonoBehaviour
     Vector3 mousePos_start; //드래그 시작점
     Vector3 mousePos_end; //드래그 끝날때
 
-    public List<GameObject> Droplist = new List<GameObject>(); //꼬리 리스트
+    List<GameObject> Droplist = new List<GameObject>(); //꼬리 리스트
     List<Coordset> Coordlist = new List<Coordset>(); //지나온 좌표를 저장하는 리스트
     List<int> Dirlist = new List<int>(); //지나온 방향을 저장하는 리스트.
 
@@ -317,6 +317,22 @@ public class PlayerController : MonoBehaviour
         {
             isHit = false;
             MoveSpeed = orgMoveSpeed;
+        }
+    }
+
+    //연결 이펙트
+    public void ChainEffect(int e)
+    {
+        for (int i = 0; i < e; i++)
+        {
+            if (Droplist[i].GetComponent<ElementDrop>().Element != 4)
+                Droplist[i].transform.Find("ChainEffect").gameObject.SetActive(true);
+            else
+                e++;
+        }
+        for (int i = e; i < Droplist.Count; i++)
+        {
+            Droplist[i].transform.Find("ChainEffect").gameObject.SetActive(false);
         }
     }
 

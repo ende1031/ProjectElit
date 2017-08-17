@@ -32,6 +32,10 @@ public class AttackManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+        //연결 이펙트
+        GetComponent<PlayerController>().ChainEffect(Chargelist[4]);
+        if (Chargelist[4] > 0) Debug.Log(Chargelist[4] + "개 차지중");
+
         //공격
         if (Input.GetKeyUp(KeyCode.Space))
         {
