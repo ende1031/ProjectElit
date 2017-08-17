@@ -7,38 +7,40 @@ public class ElementDrop : MonoBehaviour
 {
 
     public int Element; //0:불, 1:물, 2:바람, 3:땅, 4:방해
-
-    Vector2 Coordinate; //좌표
-    float GridSize;
-
-    float MoveSpeed;
-    public int Direction; // 0 : 위, 1 : 아래, 2 : : 왼쪽, 3 : 오른쪽
-    Vector3 MoveVec; //방향 벡터
-
     public int DropNumber; //이 꼬리구슬이 앞에서 몇 번째 구슬인지
+
+    public int Direction; // 0 : 위, 1 : 아래, 2 : : 왼쪽, 3 : 오른쪽
+
+    Color BallColor;
+    //Vector2 Coordinate; //좌표
+    //float GridSize;
+
+    //float MoveSpeed;
+    //Vector3 MoveVec; //방향 벡터
+    
+
 
     // Use this for initialization
     void Start()
     {
-        GridSize = GameObject.Find("Player").GetComponent<PlayerController>().GridSize;
-        MoveSpeed = GameObject.Find("Player").GetComponent<PlayerController>().MoveSpeed;
+        //GridSize = GameObject.Find("Player").GetComponent<PlayerController>().GridSize;
+        //MoveSpeed = GameObject.Find("Player").GetComponent<PlayerController>().MoveSpeed;
+
+        BallColor = GetComponent<SpriteRenderer>().color;
+        BallColor.a = 0;
+        GetComponent<SpriteRenderer>().color = BallColor;
     }
 
     // Update is called once per frame
     void Update()
     {
-        switch (Element) //각 속성별로 다르게 실행되는걸 넣어보자. (ex: 스프라이트 애니메이션)
-        {
-            case 0: //불속성
-                break;
-            case 1: //물속성
-                break;
-            case 2: //바람속성
-                break;
-            case 3: //땅속성
-                break;
-            case 4: //방해속성
-                break;
-        }
+        
+        if (BallColor.a < 1.0f)
+            BallColor.a += 2 * Time.deltaTime;
+        if (BallColor.a >= 1.0f)
+            BallColor.a = 1.0f;
+
+        GetComponent<SpriteRenderer>().color = BallColor;
+        
     }
 }

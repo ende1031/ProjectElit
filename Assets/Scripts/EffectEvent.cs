@@ -18,6 +18,12 @@ public class EffectEvent : MonoBehaviour {
         Destroy(transform.parent.gameObject);
     }
 
+    //현재 오브젝트 삭제
+    void DestroyThis()
+    {
+        Destroy(this.gameObject);
+    }
+
     //몬스터가 공격을 마치고 다시 움직이게 해줌
     void MonsterAttackEnd()
     {

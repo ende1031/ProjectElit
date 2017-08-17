@@ -40,6 +40,10 @@ public class PlayerController : MonoBehaviour
 
     public GameObject NormalCanvas;
     public GameObject GameOverCanvas;
+
+    public GameObject GetEffect;
+    public GameObject UseEffect;
+
     AttackManager AttackRef;
 
     Vector2 Coordinate; //좌표
@@ -54,7 +58,7 @@ public class PlayerController : MonoBehaviour
     Vector3 mousePos_start; //드래그 시작점
     Vector3 mousePos_end; //드래그 끝날때
 
-    List<GameObject> Droplist = new List<GameObject>(); //꼬리 리스트
+    public List<GameObject> Droplist = new List<GameObject>(); //꼬리 리스트
     List<Coordset> Coordlist = new List<Coordset>(); //지나온 좌표를 저장하는 리스트
     List<int> Dirlist = new List<int>(); //지나온 방향을 저장하는 리스트.
 
@@ -221,30 +225,35 @@ public class PlayerController : MonoBehaviour
             InsertDrop(0);
             Destroy(ObjectManager.instance.PlacedObject(Coordinate, "fire_ball"));
             ObjectManager.instance.FieldElementNum--;
+            Instantiate(GetEffect, new Vector3(Coordinate.x * GridSize, Coordinate.y * GridSize - 0.5f, -0.5f), transform.rotation); //아이템 먹는 이펙트
         }
         else if (ObjectManager.instance.isPlace(Coordinate, "water_ball"))
         {
             InsertDrop(1);
             Destroy(ObjectManager.instance.PlacedObject(Coordinate, "water_ball"));
             ObjectManager.instance.FieldElementNum--;
+            Instantiate(GetEffect, new Vector3(Coordinate.x * GridSize, Coordinate.y * GridSize - 0.5f, -0.5f), transform.rotation); //아이템 먹는 이펙트
         }
         else if (ObjectManager.instance.isPlace(Coordinate, "wind_ball"))
         {
             InsertDrop(2);
             Destroy(ObjectManager.instance.PlacedObject(Coordinate, "wind_ball"));
             ObjectManager.instance.FieldElementNum--;
+            Instantiate(GetEffect, new Vector3(Coordinate.x * GridSize, Coordinate.y * GridSize - 0.5f, -0.5f), transform.rotation); //아이템 먹는 이펙트
         }
         else if (ObjectManager.instance.isPlace(Coordinate, "sand_ball"))
         {
             InsertDrop(3);
             Destroy(ObjectManager.instance.PlacedObject(Coordinate, "sand_ball"));
             ObjectManager.instance.FieldElementNum--;
+            Instantiate(GetEffect, new Vector3(Coordinate.x * GridSize, Coordinate.y * GridSize - 0.5f, -0.5f), transform.rotation); //아이템 먹는 이펙트
         }
         else if (ObjectManager.instance.isPlace(Coordinate, "null_ball"))
         {
             InsertDrop(4);
             Destroy(ObjectManager.instance.PlacedObject(Coordinate, "null_ball"));
             ObjectManager.instance.FieldElementNum--;
+            Instantiate(GetEffect, new Vector3(Coordinate.x * GridSize, Coordinate.y * GridSize - 0.5f, -0.5f), transform.rotation); //아이템 먹는 이펙트
         }
     }
 
@@ -708,6 +717,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Droplist.Count > NullElementNum)
         {
+            Instantiate(UseEffect, new Vector3(Droplist[NullElementNum].transform.position.x, Droplist[NullElementNum].transform.position.y, -0.5f), transform.rotation); //사용 이펙트
             Destroy(Droplist[NullElementNum]);
             Droplist.RemoveAt(NullElementNum);
         }
@@ -718,6 +728,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Droplist.Count > e)
         {
+            Instantiate(UseEffect, new Vector3(Droplist[e].transform.position.x, Droplist[e].transform.position.y, -0.5f), transform.rotation); //사용 이펙트
             Destroy(Droplist[e]);
             Droplist.RemoveAt(e);
         }
