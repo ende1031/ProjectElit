@@ -91,12 +91,14 @@
     <Compile Include="Assets\Scripts\ElementalMagic.cs" />
     <Compile Include="Assets\Scripts\Elemnet_ball_animnation.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
+    <Compile Include="Assets\Scripts\LoadButton.cs" />
     <Compile Include="Assets\Scripts\Monster.cs" />
     <Compile Include="Assets\Scripts\ObjectManager.cs" />
     <Compile Include="Assets\Scripts\Pause.cs" />
     <Compile Include="Assets\Scripts\PlayerController.cs" />
     <Compile Include="Assets\Scripts\SaveManager.cs" />
     <Compile Include="Assets\Scripts\SelectStage.cs" />
+    <Compile Include="Assets\Scripts\SlideDisplay.cs" />
     <Compile Include="Assets\Scripts\StageLock.cs" />
     <Compile Include="Assets\Scripts\Title.cs" />
   </ItemGroup>

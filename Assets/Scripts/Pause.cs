@@ -62,6 +62,6 @@ public class Pause : MonoBehaviour
     //스테이지 다시 시작
     public void RestartStage()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        GameManager.instance.FadeAndLoadScene(Application.loadedLevelName);
     }
 }
