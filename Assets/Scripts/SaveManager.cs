@@ -15,7 +15,7 @@ public class SaveManager : MonoBehaviour
     void Start()
     {
         InputStage(20); //개발용 코드 0 = 1스테이지 클리어(배포시 지울예정)
-        if (!File.Exists(Application.dataPath + "/Resources/save.dat")) InputStage(20);  //세이브 데이터가 없으면 새로 만든다.
+        if (!File.Exists(Application.dataPath + "/save.dat")) InputStage(20);  //세이브 데이터가 없으면 새로 만든다.
     }
 
     void InputData()//클래스에 저장된 값을 직렬화 후 save.dat에저장한다.
@@ -24,7 +24,7 @@ public class SaveManager : MonoBehaviour
         {
             var b = new BinaryFormatter();
 
-            var f = File.Create(Application.dataPath + "/Resources/save.dat");
+            var f = File.Create(Application.dataPath + "/save.dat");
             Debug.Log(Application.dataPath);
 
             b.Serialize(f, m_save);
@@ -40,11 +40,11 @@ public class SaveManager : MonoBehaviour
     {
         try
         {
-            if (File.Exists(Application.dataPath + "/Resources/save.dat"))
+            if (File.Exists(Application.dataPath + "/save.dat"))
             {
                 Debug.Log("Exists!!");
                 var b = new BinaryFormatter();
-                var f = File.Open(Application.dataPath + "/Resources/save.dat", FileMode.Open);
+                var f = File.Open(Application.dataPath + "/save.dat", FileMode.Open);
 
                 m_save = (SaveData)b.Deserialize(f);
                 f.Close();
