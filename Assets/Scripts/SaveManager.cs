@@ -15,7 +15,7 @@ public class SaveManager : MonoBehaviour
     void Start()
     {
         InputStage(20); //개발용 코드 0 = 1스테이지 클리어(배포시 지울예정)
-        if (!File.Exists(Application.dataPath + "/Resources/save.dat")) InputStage(0);  //세이브 데이터가 없으면 새로 만든다.
+        if (!File.Exists(Application.dataPath + "/Resources/save.dat")) InputStage(20);  //세이브 데이터가 없으면 새로 만든다.
     }
 
     void InputData()//클래스에 저장된 값을 직렬화 후 save.dat에저장한다.
