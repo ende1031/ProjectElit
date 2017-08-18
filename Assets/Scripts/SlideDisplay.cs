@@ -53,7 +53,7 @@ public class SlideDisplay : MonoBehaviour
             else targetPosition = (new Vector3(0, 56, -10));
 
             //모든 챕터의 버튼을 모두 페이드아웃, 인
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 3; i++)
             {
                 Stage[i].GetComponent<LoadButton>().FadeButton(1.5f);
             }
@@ -65,7 +65,7 @@ public class SlideDisplay : MonoBehaviour
             if (chapter_pos == 3) targetPosition = (new Vector3(0, 27, -10));
             else targetPosition = (new Vector3(0, 1, -10));
 
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 3; i++)
             {
                 Stage[i].GetComponent<LoadButton>().FadeButton(1.5f);
             }
