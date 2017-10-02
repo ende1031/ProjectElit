@@ -6,20 +6,58 @@ using UnityEngine.UI;
 public class LoadButton : MonoBehaviour
 {
     public AnimatorOverrideController FadeOut, FadeIn;
+    public GameObject[] ChapterNum = new GameObject[3];
+    float tempTime;
+    int chapterNow, chapterBefore;
 
-    public void FadeButton(float x)//x 는 페이드 아웃 지연시간
+    void Start()
     {
-        FadeOutButton();
-        Invoke("FadeInButton", x);
+        chapterNow = 0;
+        chapterBefore = -1;
+        tempTime = 0.1f;
     }
 
-    void FadeInButton()
+    void Update()
     {
-        this.GetComponent<Animator>().runtimeAnimatorController = FadeIn;
+        if (tempTime > 0)
+        {
+            tempTime -= Time.deltaTime;
+        }
+
+        if (tempTime <= 0 && chapterNow != chapterBefore)//이전 챕터와 다를때만 적용
+        {
+            chapterBefore = chapterNow;
+            for (int i = 0; i < 3; i++)
+            {
+                if (chapterNow == i)
+                {
+                    FadeInButton(chapterNow);
+                }
+                else
+                {
+                    FadeOutButton(i);
+                }
+            }
+        }
     }
 
-    void FadeOutButton()
+    public void FadeButton(int x, float y)//x 는 페이드 인 할 챕터 번호, y 는 애니메이션 적용 지연시간
     {
-        this.GetComponent<Animator>().runtimeAnimatorController = FadeOut;
+        tempTime = y;
+        chapterNow = (x - 1);
     }
+
+    void FadeInButton(int x)
+    {
+        ChapterNum[chapterNow].SetActive(false);
+        ChapterNum[chapterNow].SetActive(true);
+        ChapterNum[x].GetComponent<Animator>().runtimeAnimatorController = FadeIn;
+    } 
+
+    void FadeOutButton(int x)
+    {
+        ChapterNum[x].GetComponent<Animator>().runtimeAnimatorController = FadeOut;
+    }
+    
+    
 }

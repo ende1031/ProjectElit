@@ -8,10 +8,11 @@ public class Destroy : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         Invoke("DestroyObject", destroy_delay);
-	}
+    }
 
     void DestroyObject()
     {
+        ObjectManager.instance.FieldElementNum--;
         Destroy(this.gameObject);
     }
 }
