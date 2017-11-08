@@ -42366,13 +42366,13 @@ frame. Minimum value is 1 and maximum is 33.</para>
       <summary>
         <para>Get the corners of the calculated rectangle in the local space of its Transform.</para>
       </summary>
-      <param name="fourCornersArray">Array that corners should be filled into.</param>
+      <param name="fourCornersArray">The array that corners are filled into.</param>
     </member>
     <member name="M:UnityEngine.RectTransform.GetWorldCorners(UnityEngine.Vector3[])">
       <summary>
         <para>Get the corners of the calculated rectangle in world space.</para>
       </summary>
-      <param name="fourCornersArray">Array that corners should be filled into.</param>
+      <param name="fourCornersArray">The ray that corners are filled into.</param>
     </member>
     <member name="T:UnityEngine.RectTransform.ReapplyDrivenProperties">
       <summary>

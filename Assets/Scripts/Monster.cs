@@ -29,6 +29,8 @@ public class Monster : MonoBehaviour {
     int AttackDir;
     bool isRun = false;
 
+    public bool isDropItem;
+
     // Use this for initialization
     void Start ()
     {
@@ -248,7 +250,8 @@ public class Monster : MonoBehaviour {
 
     void Die()
     {
-        DropItem();
+        if(isDropItem == true)
+            DropItem();
         Destroy(this.gameObject);
     }
 

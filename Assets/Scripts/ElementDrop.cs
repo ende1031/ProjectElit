@@ -7,6 +7,7 @@ public class ElementDrop : MonoBehaviour
 {
 
     public int Element; //0:불, 1:물, 2:바람, 3:땅, 4:방해
+    public bool Fever;//현재 피버가 활성화된 구슬인지 아닌지 판별
     public int DropNumber; //이 꼬리구슬이 앞에서 몇 번째 구슬인지
 
     public int Direction; // 0 : 위, 1 : 아래, 2 : : 왼쪽, 3 : 오른쪽

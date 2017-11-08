@@ -2411,7 +2411,8 @@ Transitions with exit times greater than one will be evaluated only once, so the
     </member>
     <member name="M:UnityEditor.AssetDatabase.GetAssetPathsFromAssetBundleAndAssetName(System.String,System.String)">
       <summary>
-        <para>Get the asset paths from the given assetBundle name and asset name.</para>
+        <para>Get the Asset paths for all Assets tagged with assetBundleName and
+                named assetName.</para>
       </summary>
       <param name="assetBundleName"></param>
       <param name="assetName"></param>
@@ -14484,6 +14485,36 @@ Note: Use HandleUtility.GetHandleSize where you might want to have constant scre
         <para>Highlights an entire editor control using its label text as identifier.</para>
       </summary>
     </member>
+    <member name="T:UnityEditor.IconKind">
+      <summary>
+        <para>Icon kind.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEditor.IconKind.Any">
+      <summary>
+        <para>This icon can be used for any purpose in an application.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEditor.IconKind.Application">
+      <summary>
+        <para>This icon is used for the main application icons.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEditor.IconKind.Notification">
+      <summary>
+        <para>This icon is used for push notifications.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEditor.IconKind.Settings">
+      <summary>
+        <para>This icon is used for settings.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEditor.IconKind.Spotlight">
+      <summary>
+        <para>This icon is used for Spotlight searches. (iOS only).</para>
+      </summary>
+    </member>
     <member name="T:UnityEditor.IHVImageFormatImporter">
       <summary>
         <para>Use IHVImageFormatImporter to modify Texture2D import settings for Textures in IHV (Independent Hardware Vendor) formats such as .DDS and .PVR from Editor scripts.</para>
@@ -22318,6 +22349,11 @@ For more information - https:msdn.microsoft.comlibrarywindowsappshh779671https:m
     <member name="F:UnityEditor.Rendering.TierSettings.detailNormalMap">
       <summary>
         <para>Allows you to specify whether Detail Normal Map should be sampled if assigned.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEditor.Rendering.TierSettings.enableLPPV">
+      <summary>
+        <para>Allows you to specify whether Light Probe Proxy Volume should be used.</para>
       </summary>
     </member>
     <member name="F:UnityEditor.Rendering.TierSettings.hdr">

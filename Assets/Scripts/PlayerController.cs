@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     float hit_delay = 0;
 
     public bool immortal; //무적
-    public float immortal_timer;
+    public int immortal_timer;
 
     public class Coordset
     {
@@ -38,13 +38,19 @@ public class PlayerController : MonoBehaviour
     public GameObject EarthDrop;
     public GameObject NullDrop;
 
+    public GameObject BigFireDrop;
+    public GameObject BigWaterDrop;
+    public GameObject BigWindDrop;
+
+    public GameObject Shield;
+
     public GameObject NormalCanvas;
     public GameObject GameOverCanvas;
 
     public GameObject GetEffect;
     public GameObject UseEffect;
 
-    AttackManager AttackRef;
+    //AttackManager AttackRef;
 
     Vector2 Coordinate; //좌표
     int Direction; // 0 : 위, 1 : 아래, 2 : : 왼쪽, 3 : 오른쪽
@@ -101,8 +107,6 @@ public class PlayerController : MonoBehaviour
         immortal = false;
         immortal_timer = 0;
 
-        AttackRef = GetComponent<AttackManager>();
-
         MoveExeption = false;
     }
 
@@ -114,8 +118,8 @@ public class PlayerController : MonoBehaviour
             //일정시간 지나면 무적 풀림
             if (immortal)
             {
-                immortal_timer -= Time.deltaTime;
-                if (immortal_timer < 0)
+                //immortal_timer -= Time.deltaTime;
+                if (immortal_timer == 0)
                 {
                     immortal = false;
                     immortal_timer = 0;
@@ -123,7 +127,7 @@ public class PlayerController : MonoBehaviour
             }
 
             //맞았을 때 매 프레임 실행
-            if (isHit && !immortal) Hit();
+            if (isHit) Hit();
             else hitTimer = 0;
 
             //충돌
@@ -184,8 +188,16 @@ public class PlayerController : MonoBehaviour
         hitTimer += Time.deltaTime;
         if (hitTimer > 0.5f) // 이 시간 주기로 꼬리 하나씩 감소
         {
-            animaitor.SetBool("Hitted", true);
             hit_ing = true;
+            animaitor.SetBool("Hitted", true);
+
+            if (immortal)
+            {
+                immortal_timer--;
+                hitTimer = 0;
+                Debug.Log(immortal_timer);
+                return;
+            }
 
             if (GetTailLength() == 0 || GetTailLength() == NullElementNum)
             {
@@ -196,16 +208,21 @@ public class PlayerController : MonoBehaviour
                 RemoveDrop();
             }
             hitTimer = 0;
-            AttackRef.ResetAttack(0);
         }
     }
 
     //몬스터의 공격에 피격됐을때 실행
     public void Hit_attack()
     {
-        if (immortal) return;
         animaitor.SetBool("Hitted", true);
         hit_ing = true;
+
+        if (immortal)
+        {
+            immortal_timer--;
+            Debug.Log(immortal_timer);
+            return;
+        }
 
         if (GetTailLength() == 0 || GetTailLength() == NullElementNum)
         {
@@ -226,6 +243,7 @@ public class PlayerController : MonoBehaviour
             Destroy(ObjectManager.instance.PlacedObject(Coordinate, "fire_ball"));
             ObjectManager.instance.FieldElementNum--;
             Instantiate(GetEffect, new Vector3(Coordinate.x * GridSize, Coordinate.y * GridSize - 0.5f, -0.5f), transform.rotation); //아이템 먹는 이펙트
+            FeverMaker();//피버 구슬 추가
         }
         else if (ObjectManager.instance.isPlace(Coordinate, "water_ball"))
         {
@@ -233,6 +251,7 @@ public class PlayerController : MonoBehaviour
             Destroy(ObjectManager.instance.PlacedObject(Coordinate, "water_ball"));
             ObjectManager.instance.FieldElementNum--;
             Instantiate(GetEffect, new Vector3(Coordinate.x * GridSize, Coordinate.y * GridSize - 0.5f, -0.5f), transform.rotation); //아이템 먹는 이펙트
+            FeverMaker();//피버 구슬 추가
         }
         else if (ObjectManager.instance.isPlace(Coordinate, "wind_ball"))
         {
@@ -240,6 +259,7 @@ public class PlayerController : MonoBehaviour
             Destroy(ObjectManager.instance.PlacedObject(Coordinate, "wind_ball"));
             ObjectManager.instance.FieldElementNum--;
             Instantiate(GetEffect, new Vector3(Coordinate.x * GridSize, Coordinate.y * GridSize - 0.5f, -0.5f), transform.rotation); //아이템 먹는 이펙트
+            FeverMaker();//피버 구슬 추가
         }
         else if (ObjectManager.instance.isPlace(Coordinate, "sand_ball"))
         {
@@ -254,6 +274,15 @@ public class PlayerController : MonoBehaviour
             Destroy(ObjectManager.instance.PlacedObject(Coordinate, "null_ball"));
             ObjectManager.instance.FieldElementNum--;
             Instantiate(GetEffect, new Vector3(Coordinate.x * GridSize, Coordinate.y * GridSize - 0.5f, -0.5f), transform.rotation); //아이템 먹는 이펙트
+        }
+        else if (ObjectManager.instance.isPlace(Coordinate, "coin")) //동전
+        {
+            Destroy(ObjectManager.instance.PlacedObject(Coordinate, "coin"));
+            Instantiate(GetEffect, new Vector3(Coordinate.x * GridSize, Coordinate.y * GridSize - 0.5f, -0.5f), transform.rotation); //아이템 먹는 이펙트
+        }
+        else if (ObjectManager.instance.isPlace(Coordinate, "LogPiont")) //대화창 팝업 지점
+        {
+            ObjectManager.instance.PlacedObject(Coordinate, "LogPiont").GetComponent<LogPoint>().StartDialogue();
         }
     }
 
@@ -425,21 +454,11 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0)) //드래그 시작
         {
-            if (AttackRef.buttonDown)
-            {
-                MoveExeption = true;
-            }
             mousePos_start = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10);
         }
 
         if (Input.GetMouseButtonUp(0)) //드래그 끝. 방향전환 적용
         {
-            if (MoveExeption)
-            {
-                MoveExeption = false;
-                AttackRef.ResetAttack(0);
-                return;
-            }
             mousePos_end = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10);
 
             if (Mathf.Abs(mousePos_start.x - mousePos_end.x) < Mathf.Abs(mousePos_start.y - mousePos_end.y)) // y축 이동
@@ -703,7 +722,7 @@ public class PlayerController : MonoBehaviour
             else if (Coordlist[Droplist.Count].New.x > Coordlist[Droplist.Count].Old.x) //오른쪽
             {
                 temp.x = (Coordlist[Droplist.Count].Old.x - percentOfCoord) * GridSize;
-            }
+            } 
             //Droplist[Droplist.Count].transform.position = temp;
         }
 
@@ -719,13 +738,45 @@ public class PlayerController : MonoBehaviour
                 Droplist.Add(Instantiate(WindDrop, temp, transform.rotation));
                 break;
             case 3: //땅속성
-                Droplist.Add(Instantiate(EarthDrop, temp, transform.rotation));
+                attack_ing = true;
+                animaitor.SetInteger("Attack_element", 3);
+                if (immortal_timer == 0)
+                    Instantiate(Shield, new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity);
+
+                immortal_timer += 3;
+                immortal = true;
+                GameManager.instance.PlaySE("Sand");
+                //Droplist.Add(Instantiate(EarthDrop, temp, transform.rotation));
                 break;
             case 4: //방해속성
                 Droplist.Add(Instantiate(NullDrop, temp, transform.rotation));
                 break;
+            case 5: //불속성 피버
+                Droplist.Add(Instantiate(BigFireDrop, temp, transform.rotation));
+                break;
+            case 6: //물속성 피버
+                Droplist.Add(Instantiate(BigWaterDrop, temp, transform.rotation));
+                break;
+            case 7: //바람속성 피버
+                Droplist.Add(Instantiate(BigWindDrop, temp, transform.rotation));
+                break;
         }
         MoveTails();
+    }
+
+    void FeverMaker()
+    {
+        //Debug.Log("length " + GetTailLength());
+        //Debug.Log(", type " + GetElement(GetTailLength() - NullElementNum - 1));
+        if (GetElement(GetTailLength() - NullElementNum - 1) > 4) return;
+        if (GetElement(GetTailLength() - NullElementNum - 1) == GetElement(GetTailLength() - NullElementNum - 2) && 
+            GetElement(GetTailLength() - NullElementNum - 1) == GetElement(GetTailLength() - NullElementNum - 3))
+        {
+            int element = GetElement(GetTailLength() - NullElementNum - 1) + 5;//기존속성+5 = 피버속성
+            for (int i = 0; i < 3; i++) 
+                RemoveDropAt(GetTailLength()-1);
+            InsertDrop(element);
+        }
     }
 
     //맨 앞에있는 구슬 제거 (방해구슬은 무시함)
@@ -774,8 +825,19 @@ public class PlayerController : MonoBehaviour
     //방해구슬을 제외한 e+1번째 꼬리의 속성을 리턴. 0을 넣으면 첫번째를 리턴
     public int GetElement(int e)
     {
-        if (Droplist.Count == NullElementNum) return 99; //임시방편으로 반환할 값이 없으면 5(비어있는 속성값)를 반환.
-        return Droplist[e + NullElementNum].GetComponent<ElementDrop>().Element;
+        if (Droplist.Count == NullElementNum) return 99;
+        return Droplist[e + NullElementNum].GetComponent<ElementDrop>().Element;//반환할 값이 없으면 99(비어있는 속성값)를 반환.
+    }
+
+    public bool GetFever(int e)
+    {
+        if (Droplist.Count == NullElementNum) return false;
+        return Droplist[e + NullElementNum].GetComponent<ElementDrop>().Fever;
+    }
+
+    public void SetFever(int e, bool temp)
+    {
+        Droplist[e + NullElementNum].GetComponent<ElementDrop>().Fever = temp;
     }
 
     //플레이어가 죽었는지 안죽었는지 다른 스크립트에서 알고싶을때 사용
