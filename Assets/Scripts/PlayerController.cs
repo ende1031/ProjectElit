@@ -279,6 +279,7 @@ public class PlayerController : MonoBehaviour
         {
             Destroy(ObjectManager.instance.PlacedObject(Coordinate, "coin"));
             Instantiate(GetEffect, new Vector3(Coordinate.x * GridSize, Coordinate.y * GridSize - 0.5f, -0.5f), transform.rotation); //아이템 먹는 이펙트
+            CoinCount.instance.AddScore(1);
         }
         else if (ObjectManager.instance.isPlace(Coordinate, "LogPiont")) //대화창 팝업 지점
         {
