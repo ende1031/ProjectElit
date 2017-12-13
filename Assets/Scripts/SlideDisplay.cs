@@ -26,7 +26,8 @@ public class SlideDisplay : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             endpos = Input.mousePosition.y;
-            CameraController();
+            //CameraController();
+            //2, 3스테이지가 완성되면 주석 헤제할것
         }
         //카메라 이동
         transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, smoothTime);
