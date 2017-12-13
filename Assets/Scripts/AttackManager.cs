@@ -59,6 +59,7 @@ public class AttackManager : MonoBehaviour {
 
         if (PlayerRef.GetElement(0) > 4 && PlayerRef.GetFever(0) == false)
         {
+            ResetAttack(1);
             feverTimer = 5;
             PlayerRef.SetFever(0, true);
         }
