@@ -105,6 +105,7 @@
     <Compile Include="Assets\Scripts\SlideDisplay.cs" />
     <Compile Include="Assets\Scripts\StageLock.cs" />
     <Compile Include="Assets\Scripts\Title.cs" />
+    <Compile Include="Assets\Scripts\TitleLight.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>
