@@ -10,6 +10,7 @@ public class Monster : MonoBehaviour {
     public int StepNumber; //몇발자국
     public float MoveSpeed; //얼마나 빨리
     public int MaxHP;
+    public float Destroy_delay;
 
     int HP;
     Vector2 Size;
@@ -43,6 +44,7 @@ public class Monster : MonoBehaviour {
             animaitor = this.GetComponent<Animator>();
         else //일부 몬스터(위습)은 자식오브젝트("render")에 애니메이터가 있으므로
             animaitor = transform.Find("render").GetComponent<Animator>();
+        if(MonsterType == 1) Destroy_delay = 1f;//버섯의 죽는 애니메이션을 1초로 잡음
     }
 	
 	// Update is called once per frame
@@ -54,10 +56,14 @@ public class Monster : MonoBehaviour {
         if (MonsterType == 0 || MonsterType == 2) //일단 위습이랑 풀도치만 공격하게 해놓음
             MonsterAttack();
 
-        CollisionTail();
+        if (HP > 0) CollisionTail();
 
         if (HP <= 0)
-            Die();
+        {
+            this.GetComponent<CoordinateCollider>().Size = new Vector2(0, 0);
+            animaitor.SetBool("isDead", true);
+            Invoke("Die", Destroy_delay);
+        }
     }
 
     //플레이어의 꼬리 자르기
