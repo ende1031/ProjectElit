@@ -11,8 +11,8 @@ public class FadeOut : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        Invoke("StartFade", 1f);
-        Invoke("EndLogo", 4f);
+        Invoke("StartFade", 2f);
+        Invoke("EndLogo", 5f);
 	}
 
     void Update()
