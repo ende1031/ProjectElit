@@ -746,7 +746,7 @@ public class PlayerController : MonoBehaviour
 
                 immortal_timer += 3;
                 immortal = true;
-                GameManager.instance.PlaySE("Sand");
+                //GameManager.instance.PlaySE("Sand");
                 //Droplist.Add(Instantiate(EarthDrop, temp, transform.rotation));
                 break;
             case 4: //방해속성
